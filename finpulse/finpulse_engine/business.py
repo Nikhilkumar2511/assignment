@@ -5,7 +5,7 @@ A metric is reported only when its inputs were supplied. Missing inputs are list
 """
 from __future__ import annotations
 
-from .student import InputError
+from .student import InputError, _total, inr
 
 # (poor, good) per metric. Lower-is-better metrics have poor > good. Defaults are general rules of
 # thumb and differ by industry; pass "thresholds" in the request to override any of them.
@@ -155,7 +155,7 @@ def diagnose_business(payload: dict) -> dict:
         if missing:
             missing_by_area[area] = missing
         if have:
-            a = sum(have) / len(have)
+            a = _total(have) / len(have)
             areas_out.append({"area": area, "score": round(a, 1), "metrics_used": len(have), "metrics_missing": missing})
             weighted += weight * a; weight_sum += weight
         else:
@@ -223,7 +223,7 @@ def diagnose_business(payload: dict) -> dict:
         locked = (rd - 45) * d["revenue"] / period_days
         f.append({"area": "Efficiency", "priority": "Investigate and improve", "title": "Customers are slow to pay",
                   "evidence": {"receivable_days": round(rd, 1), "cash_released_at_45_days": round(locked, 2)},
-                  "rationale": f"Collecting in 45 days instead of {rd:.0f} would release about {locked:,.0f} of cash.",
+                  "rationale": f"Collecting in 45 days instead of {rd:.0f} would release about {inr(locked)} of cash.",
                   "next_step": "Age the receivables and agree payment terms with the largest overdue customers."})
     inv = g("inventory_days")
     if inv is not None and inv > 90:
@@ -265,7 +265,7 @@ def diagnose_business(payload: dict) -> dict:
 
 # ----------------------------------------------------------------------------- investment appraisal
 def _npv(rate: float, flows: list) -> float:
-    return sum(cf / (1 + rate) ** t for t, cf in enumerate(flows))
+    return _total(cf / (1 + rate) ** t for t, cf in enumerate(flows))
 
 
 def _irr(flows: list):

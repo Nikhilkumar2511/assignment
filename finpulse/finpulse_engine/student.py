@@ -6,6 +6,7 @@ trained model in warning_model.py. Nothing is estimated when data is missing.
 from __future__ import annotations
 
 import math
+import re
 from collections import defaultdict
 
 import numpy as np
@@ -26,6 +27,24 @@ def _model() -> WarningModel:
 
 class InputError(ValueError):
     """Raised when the request cannot be analysed. The message is safe to show to the user."""
+
+
+def inr(x) -> str:
+    """Whole rupees with Indian digit grouping: 1350 -> 1,350 and 2190000 -> 21,90,000."""
+    n = int(round(x))
+    digits = str(abs(n))
+    if len(digits) > 3:
+        head, tail = digits[:-3], digits[-3:]
+        digits = re.sub(r"(?<=\d)(?=(\d\d)+$)", ",", head) + "," + tail
+    return ("-" if n < 0 else "") + digits
+
+
+def _total(values) -> float:
+    """Plain left-to-right sum. The website's JavaScript engine adds the same way, so results match exactly."""
+    total = 0.0
+    for value in values:
+        total += value
+    return float(total)
 
 
 def _is_essential(category: str) -> bool:
@@ -74,8 +93,8 @@ def diagnose_student(payload: dict) -> dict:
         cat = (u.get("category") or "").strip() or "Upcoming bills"
         by_cat[cat]["upcoming"] = by_cat[cat].get("upcoming", 0.0) + u["amount"]
 
-    spent = float(flexible.sum() + fixed.sum())
-    spent_fixed = float(fixed.sum())
+    spent_flex, spent_fixed = _total(flexible[0]), _total(fixed[0])
+    spent = spent_flex + spent_fixed
     balance = allowance - spent
     days_left = month_days - today
     floor = floor_of(allowance)
@@ -99,9 +118,9 @@ def diagnose_student(payload: dict) -> dict:
         quality.append("Recorded spending is higher than the allowance. Check for a duplicate or a mistyped amount.")
 
     pace = spent / today
-    pace_flex = float(flexible.sum()) / today
+    pace_flex = spent_flex / today
     window = min(7, today)
-    pace_recent = float((flexible[0, today - window:today] + fixed[0, today - window:today]).sum()) / window
+    pace_recent = _total(flexible[0, i] + fixed[0, i] for i in range(today - window, today)) / window
     lasts = pace == 0 or balance / pace >= days_left
     run_out_day = None if lasts or balance <= 0 else today + int(balance // pace) + 1
     if balance <= 0:
@@ -128,7 +147,7 @@ def diagnose_student(payload: dict) -> dict:
     flag = prob >= model.threshold
     result["warning"] = {"probability": round(prob, 3), "flag": bool(flag), "threshold": model.threshold,
                          "simple_rule_flag": bool(rule_c), "basis": basis,
-                         "meaning": f"Chance that the balance falls under {floor:,.0f} on or before day {horizon}."}
+                         "meaning": f"Chance that the balance falls under {inr(floor)} on or before day {horizon}."}
     score = int(round(100 * (1 - prob)))
     result["health"] = {"score": score, "status": "On track" if score >= 70 else "Watch" if score >= 40 else "At risk"}
 
@@ -150,18 +169,18 @@ def diagnose_student(payload: dict) -> dict:
         f.append({"priority": "Urgent action", "title": f"Money is on course to run out {when}",
                   "evidence": {"balance": round(balance, 2), "pace_per_day": round(pace, 2), "days_left": days_left,
                                "warning_probability": round(prob, 3)},
-                  "rationale": f"At {pace:,.0f} a day the balance of {balance:,.0f} does not cover the {days_left} days left.",
-                  "next_step": f"Hold spending to {math.floor(max(safe, 0)):,} a day for the rest of the month."})
+                  "rationale": f"At {inr(pace)} a day the balance of {inr(balance)} does not cover the {days_left} days left.",
+                  "next_step": f"Hold spending to {inr(math.floor(max(safe, 0)))} a day for the rest of the month."})
     if len(flex_cats) >= 1:
         top = flex_cats[:2]
-        total_top = sum(c["amount"] for c in top)
+        total_top = _total(c["amount"] for c in top)
         names = " and ".join(c["category"] for c in top)
         f.append({"priority": "Investigate and improve" if (flag or run_out_day) else "Monitor",
                   "title": f"{names} take {100 * total_top / spent:.0f}% of spending",
                   "evidence": {c["category"]: c["amount"] for c in top},
                   "rationale": "These are the largest flexible categories, so a cut here moves the result most.",
                   "next_step": "Set a weekly limit for each and check it every Sunday."})
-    loose = sum(c["amount"] for c in cats if c["category"].lower() in ("uncategorised", "other", "misc", "miscellaneous"))
+    loose = _total(c["amount"] for c in cats if c["category"].lower() in ("uncategorised", "other", "misc", "miscellaneous"))
     if loose / spent > 0.15:
         f.append({"priority": "Investigate and improve", "title": f"{100 * loose / spent:.0f}% of spending has no clear category",
                   "evidence": {"uncategorised_amount": round(loose, 2)},
@@ -171,7 +190,7 @@ def diagnose_student(payload: dict) -> dict:
         projected_end = balance - pace * days_left - upcoming
         f.append({"priority": "Monitor", "title": "Spending is on pace to last the month",
                   "evidence": {"projected_month_end_balance": round(projected_end, 2)},
-                  "rationale": f"At {pace:,.0f} a day about {max(projected_end, 0):,.0f} remains at month end.",
+                  "rationale": f"At {inr(pace)} a day about {inr(max(projected_end, 0))} remains at month end.",
                   "next_step": "Move part of the expected surplus to savings on the day the next allowance arrives."})
 
     result["next_month_budget"] = _budget(payload, allowance, month_days, today, cats, by_cat, f)
@@ -184,7 +203,7 @@ def _budget(payload, allowance, month_days, today, cats, by_cat, findings) -> di
                    for c in cats if c["fixed"]]
     fixed_lines += [{"line": name, "amount": v["upcoming"], "type": "fixed"}
                     for name, v in by_cat.items() if v["amount"] == 0 and v.get("upcoming")]
-    fixed_total = sum(l["amount"] for l in fixed_lines)
+    fixed_total = _total(l["amount"] for l in fixed_lines)
     savings = float(payload.get("savings_goal", 0.05 * allowance))
     buffer = float(payload.get("buffer_share", 0.10)) * allowance
     if fixed_total + savings + buffer > allowance:
@@ -197,18 +216,18 @@ def _budget(payload, allowance, month_days, today, cats, by_cat, findings) -> di
     pool = max(0.0, allowance - fixed_total - savings - buffer)
     flex = [c for c in cats if not c["fixed"]]
     projected = {c["category"]: c["amount"] / today * month_days for c in flex}
-    need = sum(projected.values()) - pool
+    need = _total(projected.values()) - pool
     alloc = dict(projected)
     if need > 0:
         weight = {c["category"]: (0.5 if c["essential"] else 1.0) * projected[c["category"]] for c in flex}
-        remaining, active = need, set(alloc)
+        remaining, active = need, list(alloc)
         while remaining > 1e-6 and active:                   # share the cut, never below zero
-            total_w = sum(weight[k] for k in active)
+            total_w = _total(weight[k] for k in active)
             spill = 0.0
             for k in list(active):
                 cut = remaining * weight[k] / total_w
                 if cut >= alloc[k]:
-                    spill += cut - alloc[k]; alloc[k] = 0.0; active.discard(k)
+                    spill += cut - alloc[k]; alloc[k] = 0.0; active.remove(k)
                 else:
                     alloc[k] -= cut
             remaining = spill
@@ -218,11 +237,11 @@ def _budget(payload, allowance, month_days, today, cats, by_cat, findings) -> di
     lines.append({"line": "Emergency buffer", "amount": _round50(buffer), "type": "buffer"})
     extra = 0.0 if need > 0 else -need                        # unspent room goes to savings
     lines.append({"line": "Savings", "amount": _round50(savings + extra), "type": "savings"})
-    drift = allowance - sum(l["amount"] for l in lines)       # absorb rounding in one line
+    drift = allowance - _total(l["amount"] for l in lines)       # absorb rounding in one line
     target = next((l for l in sorted(lines, key=lambda l: -l["amount"]) if l["type"] == "flexible"), lines[-1])
     target["amount"] += drift
-    flexible_total = sum(l["amount"] for l in lines if l["type"] == "flexible")
-    return {"lines": lines, "total": sum(l["amount"] for l in lines),
+    flexible_total = _total(l["amount"] for l in lines if l["type"] == "flexible")
+    return {"lines": lines, "total": _total(l["amount"] for l in lines),
             "flexible_per_day": round(flexible_total / month_days, 2),
             "flexible_per_week": round(flexible_total / month_days * 7, 2),
             "method": "Fixed bills are kept. A buffer and savings are set aside. Flexible categories start from "
@@ -242,4 +261,4 @@ def savings_scenarios(monthly: float, months: int, annual_rates=(0.0, 0.06, 0.12
             "note": "Hypothetical rates with end-of-month deposits. Not a forecast and not investment advice."}
 
 
-__all__ = ["diagnose_student", "savings_scenarios", "InputError", "math"]
+__all__ = ["diagnose_student", "savings_scenarios", "InputError", "inr"]

@@ -12,8 +12,10 @@ and a budget diagnosis for a student. Everything here runs on synthetic sample d
 | Business engine | `finpulse_engine/business.py` | 13 ratios, a health score, prioritised findings, investment appraisal |
 | Explanations | `finpulse_engine/explain.py` | Plain-language summary of a result |
 | API | `api.py` | The endpoints your website calls |
-| Demo page | `web/demo.html` | A working page that uses the API |
-| Tests | `tests/test_finpulse.py` | 27 tests |
+| Website | `site/` builds `../docs/index.html` | The public prototype. Runs in the browser with no server |
+| JavaScript engine | `site/finpulse-engine.js` | A port of the Python engines, used by the website |
+| Demo page | `web/demo.html` | A second page that calls the API instead |
+| Tests | `tests/` | 30 tests, including a Python-versus-JavaScript comparison on 1,600 random requests |
 
 ## Which part is "AI"
 
@@ -33,7 +35,8 @@ Be precise about this in your report. The service has three layers.
 ```bash
 pip install -r requirements.txt
 python3 train_model.py            # optional: retrains the model and rewrites model/evaluation.md
-python3 -m pytest -q              # 27 tests
+python3 -m pytest -q              # 30 tests
+python3 site/build.py             # rebuilds the website after a change under site/
 uvicorn api:app --port 8000
 ```
 
@@ -128,7 +131,14 @@ HTTPS, and get clear consent before any real use.
   fallback path without credentials is covered by a test.
 - Turning it on sends the diagnosis figures to an outside service. Keep it off for real personal data.
 
-## Putting it online
+## The website needs no server
+
+The page in `../docs/index.html` contains the JavaScript engine, so it works from a file, from
+GitHub Pages or from any static host. It gives the same results as the Python engines: a test
+compares the two on 1,600 random requests and fails on any difference. The API below is only
+needed if you want the optional language-model explanations or a server of your own.
+
+## Putting the API online
 
 The service is a standard Python web app. Any host that runs `uvicorn api:app` will do. Your
 website and this API can live on different hosts: the website calls the API address with `fetch`.

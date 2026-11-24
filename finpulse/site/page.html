@@ -1,0 +1,306 @@
+<title>FINPULSE AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a ledger-like workbench. One header band, five hash-routed views, each view a
+     two-column bench with inputs on the left and the diagnosis on the right. */
+  :root {
+    --bg: #f2f5f4; --surface: #ffffff; --ink: #13242f; --muted: #566871; --line: #d5dedd;
+    --accent: #0a6b62; --accent-ink: #ffffff; --soft: #e6efed;
+    --good: #1a7a46; --watch: #946000; --risk: #b3261e;
+    --text: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --data: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1a20; --surface: #15252d; --ink: #e6eef0; --muted: #9fb2ba; --line: #29404a;
+      --accent: #45b9ad; --accent-ink: #06221f; --soft: #1a2f37;
+      --good: #5ccb8e; --watch: #e5ae4f; --risk: #f2867e; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1a20; --surface: #15252d; --ink: #e6eef0; --muted: #9fb2ba; --line: #29404a;
+    --accent: #45b9ad; --accent-ink: #06221f; --soft: #1a2f37;
+    --good: #5ccb8e; --watch: #e5ae4f; --risk: #f2867e; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--text); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header .wrap { padding-block: 22px 0; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+  h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  .tagline { color: var(--muted); margin: 0; flex: 1 1 280px; min-width: 0; }
+  .badge { font: 500 11.5px/1 var(--data); letter-spacing: .06em; text-transform: uppercase; color: var(--watch); border: 1px solid currentColor; border-radius: 3px; padding: 5px 7px; }
+  nav .wrap { padding-block: 16px 0; display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+  nav a { flex: none; padding: 9px 14px; color: var(--muted); text-decoration: none; font-weight: 500; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+  nav a:hover { color: var(--ink); }
+  nav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  main .wrap { padding-block: 20px 40px; }
+  .bench { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+  @media (min-width: 900px) { .bench { grid-template-columns: 380px minmax(0, 1fr); } }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 18px; min-width: 0; }
+  h2 { font-size: 17px; font-weight: 600; margin: 0 0 4px; text-wrap: balance; }
+  h3 { font: 500 11.5px/1.3 var(--data); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 22px 0 8px; }
+  p { margin: 0 0 10px; } .lead { color: var(--muted); max-width: 65ch; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-top: 10px; }
+  input, textarea { width: 100%; padding: 8px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); font: 14px/1.4 var(--data); }
+  textarea { min-height: 200px; white-space: pre; resize: vertical; font-size: 12.5px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+  .run { margin-top: 16px; width: 100%; padding: 11px; border: 0; border-radius: 4px; background: var(--accent); color: var(--accent-ink); font: 600 15px var(--text); cursor: pointer; }
+  .hint { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+  .score { display: flex; gap: 16px; align-items: center; }
+  .dial { flex: none; width: 78px; height: 78px; border-radius: 50%; border: 6px solid var(--muted); display: grid; place-items: center; font: 500 25px var(--data); }
+  .status { font-size: 19px; font-weight: 600; }
+  .is-good { color: var(--good); border-color: var(--good); } .is-watch { color: var(--watch); border-color: var(--watch); } .is-risk { color: var(--risk); border-color: var(--risk); }
+  .t-good { color: var(--good); } .t-watch { color: var(--watch); } .t-risk { color: var(--risk); }
+  .explain { margin-top: 14px; padding: 12px 14px; background: var(--soft); border-radius: 4px; max-width: 75ch; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 14px; }
+  .tile { border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; min-width: 0; }
+  .tile b { display: block; font: 500 19px/1.3 var(--data); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .tile span { font-size: 12.5px; color: var(--muted); }
+  .finding { border-left: 4px solid var(--muted); background: var(--soft); border-radius: 0 4px 4px 0; padding: 9px 12px; margin: 8px 0; }
+  .finding.p-urgent { border-color: var(--risk); } .finding.p-improve { border-color: var(--watch); } .finding.p-ok { border-color: var(--good); }
+  .finding .tag { font: 500 11px var(--data); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .finding b { display: block; } .finding small { display: block; color: var(--muted); margin-top: 2px; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-weight: 500; color: var(--muted); }
+  .num { text-align: right; font-family: var(--data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bar { height: 6px; background: var(--soft); border-radius: 3px; min-width: 60px; } .bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+  .error { color: var(--risk); font-weight: 600; }
+  .prose { max-width: 70ch; } .prose li { margin-bottom: 6px; } .prose ul { padding-left: 20px; margin: 0 0 10px; }
+  footer .wrap { padding-block: 0 28px; color: var(--muted); font-size: 12.5px; }
+</style>
+<!--BODY-->
+<header><div class="wrap">
+  <h1>FINPULSE AI</h1>
+  <p class="tagline">Financial health diagnosis for small businesses, and budget diagnosis for students.</p>
+  <span class="badge">Prototype · sample data</span>
+</div></header>
+<nav aria-label="Tools"><div class="wrap">
+  <a href="#student" data-view="student">Student budget</a>
+  <a href="#business" data-view="business">Business health</a>
+  <a href="#invest" data-view="invest">Investment appraisal</a>
+  <a href="#savings" data-view="savings">Savings scenarios</a>
+  <a href="#about" data-view="about">How it works</a>
+</div></nav>
+
+<main><div class="wrap">
+
+  <section id="view-student" class="bench">
+    <form class="panel" id="form-student">
+      <h2>Your month so far</h2>
+      <p class="lead">The figures below are an example student. Replace them with your own.</p>
+      <div class="two">
+        <div><label for="s-allowance">Monthly allowance (₹)</label><input id="s-allowance" type="number" min="1" step="any"></div>
+        <div><label for="s-today">Today, day of month</label><input id="s-today" type="number" min="1" max="31"></div>
+        <div><label for="s-days">Days in this month</label><input id="s-days" type="number" min="28" max="31"></div>
+        <div><label for="s-savings">Savings goal (₹)</label><input id="s-savings" type="number" min="0" step="any"></div>
+      </div>
+      <label for="s-tx">Spending, one per line: day, amount, category, fixed bill (yes or no)</label>
+      <textarea id="s-tx" spellcheck="false"></textarea>
+      <p class="hint">Mark recurring bills as fixed so they are not projected forward.</p>
+      <button class="run" type="submit">Diagnose my month</button>
+    </form>
+    <div class="panel" id="out-student" aria-live="polite"></div>
+  </section>
+
+  <section id="view-business" class="bench" hidden>
+    <form class="panel" id="form-business">
+      <h2>One period of accounts</h2>
+      <p class="lead">An example business for one month, in rupees. Leave a box empty if you do not have the figure.</p>
+      <div class="two" id="b-fields"></div>
+      <h3>Previous period, for trends</h3>
+      <div class="two" id="b-prior"></div>
+      <button class="run" type="submit">Diagnose the business</button>
+    </form>
+    <div class="panel" id="out-business" aria-live="polite"></div>
+  </section>
+
+  <section id="view-invest" class="bench" hidden>
+    <form class="panel" id="form-invest">
+      <h2>Projects to compare</h2>
+      <p class="lead">Example projects. This ranks a company's own spending options. It does not pick shares or funds.</p>
+      <div class="two">
+        <div><label for="i-rate">Discount rate (% a year)</label><input id="i-rate" type="number" step="any"></div>
+        <div><label for="i-cash">Cash available (₹)</label><input id="i-cash" type="number" min="0" step="any"></div>
+        <div><label for="i-reserve">Cash reserve to keep (₹)</label><input id="i-reserve" type="number" min="0" step="any"></div>
+      </div>
+      <label for="i-options">One project per line: name | cost | yearly cash flows</label>
+      <textarea id="i-options" spellcheck="false" style="min-height:120px"></textarea>
+      <button class="run" type="submit">Compare the projects</button>
+    </form>
+    <div class="panel" id="out-invest" aria-live="polite"></div>
+  </section>
+
+  <section id="view-savings" class="bench" hidden>
+    <form class="panel" id="form-savings">
+      <h2>A monthly saving</h2>
+      <p class="lead">See what a regular saving adds up to at three example rates.</p>
+      <div class="two">
+        <div><label for="v-monthly">Saved each month (₹)</label><input id="v-monthly" type="number" min="0" step="any" value="500"></div>
+        <div><label for="v-months">Number of months</label><input id="v-months" type="number" min="1" max="600" value="24"></div>
+      </div>
+      <button class="run" type="submit">Show the scenarios</button>
+    </form>
+    <div class="panel" id="out-savings" aria-live="polite"></div>
+  </section>
+
+  <section id="view-about" hidden>
+    <div class="panel prose">
+      <h2>How FINPULSE AI works</h2>
+      <p>FINPULSE AI turns a month of spending, or one period of accounts, into a diagnosis: what the position is, why, and what to do first. It has three layers.</p>
+      <ul>
+        <li><b>Rules and formulas.</b> Every ratio, date and budget line is a fixed calculation you can trace. The business diagnosis is entirely rule-based.</li>
+        <li><b>A trained model.</b> The student early warning is a logistic regression with six inputs. It estimates the chance that the balance falls under 5% of the allowance five or more days before month end.</li>
+        <li><b>A language model, optional.</b> The server version can rewrite a result in friendlier words. This website does not use it. The explanations here are built from the calculated figures.</li>
+      </ul>
+      <h3>How the early-warning model tested</h3>
+      <div class="scroll"><table>
+        <tr><th>Method, checked on day 10</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">Students flagged</th></tr>
+        <tr><td>Trained model</td><td class="num">68.8%</td><td class="num">80.4%</td><td class="num">42.4%</td></tr>
+        <tr><td>Simple pace rule</td><td class="num">67.7%</td><td class="num">77.6%</td><td class="num">41.6%</td></tr>
+        <tr><td>Naive rule: spent more than the pro-rata share</td><td class="num">42.6%</td><td class="num">99.0%</td><td class="num">84.3%</td></tr>
+      </table></div>
+      <p class="hint">Held-out synthetic student-months, mean of three random seeds. The model was trained on 113,813 synthetic student-months.</p>
+      <h3>Limits</h3>
+      <ul>
+        <li>All training and sample data is synthetic. Accuracy on real students is not known yet.</li>
+        <li>Business thresholds are general rules of thumb and differ by industry.</li>
+        <li>Any finding that needs urgent action caps the business score at 44, so a strong average cannot hide a cash shortage.</li>
+        <li>A measure with missing inputs is left out and listed. Nothing is guessed.</li>
+        <li>FINPULSE AI gives education and scenarios. It never names a share, fund or scheme, and it never promises a return.</li>
+      </ul>
+      <h3>Your data</h3>
+      <p>Everything on this website is calculated in your own browser. Nothing you type is sent anywhere or stored.</p>
+    </div>
+  </section>
+
+</div></main>
+<footer><div class="wrap">Student project for the AI Systems &amp; Data for Decision-Makers course. Sample figures are synthetic. Not financial advice.</div></footer>
+
+<script>/*__ENGINE__*/</script>
+<script>
+(function () {
+  "use strict";
+  const F = window.FinPulse, $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const rupees = n => (n === null || n === undefined) ? "n/a" : (F.pyRound(n, 0) < 0 ? "-₹" + F.inr(-n) : "₹" + F.inr(n));
+  const VIEWS = ["student", "business", "invest", "savings", "about"];
+  const B_FIELDS = [["revenue", "Revenue"], ["cogs", "Cost of goods sold"], ["operating_expenses", "Operating expenses"],
+    ["depreciation", "Depreciation"], ["interest", "Interest"], ["tax", "Tax"], ["cash", "Cash"], ["receivables", "Receivables"],
+    ["inventory", "Inventory"], ["payables", "Payables"], ["short_term_debt", "Short-term debt"], ["long_term_debt", "Long-term debt"], ["equity", "Equity"]];
+  const B_PRIOR = B_FIELDS.slice(0, 6);
+  const box = (prefix, f) => `<div><label for="${prefix}${f[0]}">${f[1]}</label><input id="${prefix}${f[0]}" type="number" min="0" step="any"></div>`;
+  $("b-fields").innerHTML = B_FIELDS.map(f => box("b-", f)).join("");
+  $("b-prior").innerHTML = B_PRIOR.map(f => box("p-", f)).join("");
+
+  const tone = s => ({ "On track": "good", "Healthy": "good", "Watch": "watch", "At risk": "risk" }[s] || "");
+  const ptone = p => p === "Urgent action" ? "p-urgent" : p === "Investigate and improve" ? "p-improve" : (p === "Monitor" || p === "Evaluate investment") ? "p-ok" : "";
+  const head = h => `<div class="score"><div class="dial ${tone(h.status) ? "is-" + tone(h.status) : ""}">${h.score === null ? "?" : Math.round(h.score)}</div>
+    <div><div class="status ${tone(h.status) ? "t-" + tone(h.status) : ""}">${esc(h.status)}</div>
+    <div class="hint" style="margin:0">Health score out of 100${h.note ? ". " + esc(h.note) : ""}</div></div></div>`;
+  const tile = (v, l) => `<div class="tile"><b>${v}</b><span>${l}</span></div>`;
+  const findings = list => "<h3>What to do, in order</h3>" + list.map(f => `<div class="finding ${ptone(f.priority)}">
+    <span class="tag">${esc(f.priority)}</span><b>${esc(f.title)}</b>${esc(f.rationale)}<small>Next step: ${esc(f.next_step)}</small></div>`).join("");
+  function guard(out, fn) {
+    try { $(out).innerHTML = fn(); }
+    catch (e) { if (!(e instanceof F.InputError)) throw e; $(out).innerHTML = `<p class="error">Please check the figures: ${esc(e.message)}.</p>`; }
+  }
+  const val = id => $(id).value.trim();
+
+  function runStudent(ev) {
+    if (ev) ev.preventDefault();
+    guard("out-student", () => {
+      const transactions = $("s-tx").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+        const p = l.split(",").map(x => x.trim());
+        return { day: Number(p[0]), amount: Number(p[1]), category: p[2] || null, fixed: /^(y|yes|true|1)$/i.test(p[3] || "") };
+      });
+      const body = { allowance: Number(val("s-allowance")), today: Number(val("s-today")), month_days: Number(val("s-days") || 30), transactions };
+      if (val("s-savings") !== "") body.savings_goal = Number(val("s-savings"));
+      const r = F.diagnoseStudent(body);
+      if (r.health.score === null) return head(r.health) + findings(r.findings);
+      const b = r.next_month_budget;
+      return head(r.health) + `<div class="explain">${esc(F.explain(r))}</div><div class="tiles">`
+        + tile(rupees(r.summary.balance), "Balance left") + tile(r.run_out.day ? "Day " + r.run_out.day : "Lasts the month", "Money runs out")
+        + tile(rupees(Math.floor(r.run_out.safe_to_spend_per_day)), "Safe to spend per day") + tile(Math.round(100 * r.warning.probability) + "%", "Chance of running short") + "</div>"
+        + findings(r.findings)
+        + `<h3>Where the money went</h3><div class="scroll"><table><tr><th>Category</th><th class="num">Spent</th><th class="num">Share</th><th></th><th>Type</th></tr>`
+        + r.categories.map(c => `<tr><td>${esc(c.category)}</td><td class="num">${rupees(c.amount)}</td><td class="num">${Math.round(100 * c.share)}%</td>
+            <td><div class="bar"><i style="width:${Math.round(100 * c.share / r.categories[0].share)}%"></i></div></td><td>${c.fixed ? "Fixed bill" : "Flexible"}</td></tr>`).join("")
+        + `</table></div><h3>Budget for next month</h3><div class="scroll"><table><tr><th>Line</th><th class="num">Amount</th><th class="num">Change from this month's pace</th></tr>`
+        + b.lines.map(l => `<tr><td>${esc(l.line)}</td><td class="num">${rupees(l.amount)}</td><td class="num">${l.change_vs_current_pace === undefined ? "" : (l.change_vs_current_pace > 0 ? "+" : "") + F.inr(l.change_vs_current_pace)}</td></tr>`).join("")
+        + `<tr><th>Total</th><th class="num">${rupees(b.total)}</th><th></th></tr></table></div>`
+        + `<p class="hint">Flexible spending: ${rupees(b.flexible_per_day)} a day, ${rupees(b.flexible_per_week)} a week. ${esc(b.method)}</p>`;
+    });
+  }
+
+  function runBusiness(ev) {
+    if (ev) ev.preventDefault();
+    guard("out-business", () => {
+      const read = (prefix, fields) => { const o = {}; fields.forEach(f => { if (val(prefix + f[0]) !== "") o[f[0]] = Number(val(prefix + f[0])); }); return o; };
+      const body = read("b-", B_FIELDS), prior = read("p-", B_PRIOR);
+      if (Object.keys(prior).length) body.prior = prior;
+      const r = F.diagnoseBusiness(body);
+      const show = m => m.unit === "share" ? (100 * m.value).toFixed(1) + "%" : m.unit === "currency" ? rupees(m.value) : m.value.toFixed(2) + " " + m.unit;
+      return head(r.health) + `<div class="explain">${esc(F.explain(r))}</div><div class="tiles">`
+        + r.areas.map(a => tile(a.score === null ? "n/a" : Math.round(a.score), esc(a.area))).join("") + "</div>" + findings(r.findings)
+        + `<h3>Measures</h3><div class="scroll"><table><tr><th>Measure</th><th class="num">Value</th><th>Band</th></tr>`
+        + r.metrics.map(m => `<tr><td>${esc(m.metric.replace(/_/g, " "))}</td><td class="num">${show(m)}</td>
+            <td class="${m.band === "good" ? "t-good" : m.band === "poor" ? "t-risk" : m.band ? "t-watch" : ""}">${m.band || ""}</td></tr>`).join("")
+        + `</table></div><p class="hint">${esc(r.thresholds_note)}${r.assumptions.length ? " Assumptions: " + esc(r.assumptions.join(" ")) : ""}</p>`;
+    });
+  }
+
+  function runInvest(ev) {
+    if (ev) ev.preventDefault();
+    guard("out-invest", () => {
+      const options = $("i-options").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+        const p = l.split("|").map(x => x.trim());
+        return { name: p[0], initial_cost: Number(p[1]), cash_flows: (p[2] || "").split(",").map(x => x.trim()).filter(Boolean).map(Number) };
+      });
+      const body = { discount_rate: Number(val("i-rate")) / 100, options };
+      if (val("i-cash") !== "") { body.cash = Number(val("i-cash")); body.reserve = Number(val("i-reserve") || 0); }
+      const r = F.appraiseInvestments(body);
+      return `<h2>Ranked by net present value</h2><p class="lead">Projects that keep the cash reserve and stay positive under a 20% shortfall come first.</p>
+        <div class="scroll"><table><tr><th>Project</th><th class="num">Cost</th><th class="num">NPV</th><th class="num">IRR</th><th class="num">Payback</th><th class="num">NPV if cash flows are 20% lower</th><th>Verdict</th></tr>`
+        + r.options.map(o => `<tr><td>${esc(o.name)}</td><td class="num">${rupees(o.initial_cost)}</td><td class="num">${rupees(o.npv)}</td>
+            <td class="num">${o.irr === null ? "n/a" : (100 * o.irr).toFixed(1) + "%"}</td><td class="num">${o.payback_years === null ? "never" : o.payback_years.toFixed(1) + " yrs"}</td>
+            <td class="num">${rupees(o.npv_if_cash_flows_20pct_lower)}</td>
+            <td class="${o.verdict.startsWith("Worth") ? "t-good" : o.verdict.startsWith("Fragile") ? "t-watch" : "t-risk"}">${esc(o.verdict)}</td></tr>`).join("")
+        + `</table></div><p class="hint">Cash reserve check: ${esc(r.cash_check)}. ${esc(r.note)}</p>`;
+    });
+  }
+
+  function runSavings(ev) {
+    if (ev) ev.preventDefault();
+    guard("out-savings", () => {
+      const r = F.savingsScenarios(Number(val("v-monthly")), Number(val("v-months")));
+      return `<h2>What it adds up to</h2><div class="tiles">` + tile(rupees(r.paid_in), "You pay in")
+        + r.scenarios.map(s => tile(rupees(s.value), s.annual_rate === 0 ? "Value with no return" : `Value at ${Math.round(100 * s.annual_rate)}% a year`)).join("")
+        + `</div><p class="hint">${esc(r.note)} These rates are examples only. For a student, saving more each month changes the result far more than a higher rate does.</p>`;
+    });
+  }
+
+  function route() {
+    const want = location.hash.replace("#", "");
+    const view = VIEWS.includes(want) ? want : "student";
+    VIEWS.forEach(v => { $("view-" + v).hidden = v !== view; });
+    document.querySelectorAll("nav a").forEach(a => { if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  }
+
+  const S = F.SAMPLES;
+  $("s-allowance").value = S.student.allowance; $("s-today").value = S.student.today; $("s-days").value = S.student.month_days; $("s-savings").value = S.student.savings_goal;
+  $("s-tx").value = S.student.transactions.map(t => [t.day, t.amount, t.category, t.fixed ? "yes" : "no"].join(", ")).join("\n");
+  B_FIELDS.forEach(f => { if (S.business[f[0]] !== undefined) $("b-" + f[0]).value = S.business[f[0]]; });
+  B_PRIOR.forEach(f => { if (S.business.prior[f[0]] !== undefined) $("p-" + f[0]).value = S.business.prior[f[0]]; });
+  $("i-rate").value = 100 * S.invest.discount_rate; $("i-cash").value = S.invest.cash; $("i-reserve").value = S.invest.reserve;
+  $("i-options").value = S.invest.options.map(o => `${o.name} | ${o.initial_cost} | ${o.cash_flows.join(", ")}`).join("\n");
+  $("form-student").addEventListener("submit", runStudent); $("form-business").addEventListener("submit", runBusiness);
+  $("form-invest").addEventListener("submit", runInvest); $("form-savings").addEventListener("submit", runSavings);
+  window.addEventListener("hashchange", route);
+  runStudent(); runBusiness(); runInvest(); runSavings(); route();
+})();
+</script>

@@ -12,6 +12,8 @@ import json
 import os
 import re
 
+from .student import inr
+
 LLM_MODEL = os.environ.get("FINPULSE_LLM_MODEL", "claude-opus-5-5")
 SYSTEM_PROMPT = """You explain a financial diagnosis to the person it is about.
 
@@ -34,18 +36,18 @@ def template_explanation(result: dict) -> str:
         if health.get("score") is None:
             return "There is not enough recorded spending yet to give a diagnosis. Add your spends and try again."
         r, w = result["run_out"], result["warning"]
-        parts.append(f"You have spent {s['spent']:,.0f} of {s['allowance']:,.0f} by day {s['today']}, "
-                     f"which leaves {s['balance']:,.0f} for {s['days_left']} days.")
+        parts.append(f"You have spent {inr(s['spent'])} of {inr(s['allowance'])} by day {s['today']}, "
+                     f"which leaves {inr(s['balance'])} for {s['days_left']} days.")
         if r["day"]:
-            parts.append(f"At your current pace of {result['pace']['per_day']:,.0f} a day the money runs out on day {r['day']}.")
+            parts.append(f"At your current pace of {inr(result['pace']['per_day'])} a day the money runs out on day {r['day']}.")
         else:
-            parts.append(f"At your current pace of {result['pace']['per_day']:,.0f} a day the money lasts the month.")
-        parts.append(f"To reach month end you can spend {int(r['safe_to_spend_per_day']):,} a day.")
+            parts.append(f"At your current pace of {inr(result['pace']['per_day'])} a day the money lasts the month.")
+        parts.append(f"To reach month end you can spend {inr(int(r['safe_to_spend_per_day']))} a day.")
         parts.append(f"The chance of running short is {100 * w['probability']:.0f}%, so your status is {health['status']}.")
         flex = [c for c in result.get("categories", []) if not c["fixed"]][:2]
         if flex:
             parts.append("Your largest flexible spending is " + " and ".join(
-                f"{c['category']} ({c['amount']:,.0f})" for c in flex) + ", so start there.")
+                f"{c['category']} ({inr(c['amount'])})" for c in flex) + ", so start there.")
     elif result.get("mode") == "business":
         if health.get("score") is None:
             parts.append("There is not enough data for an overall health score.")
