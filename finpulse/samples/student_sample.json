@@ -1,0 +1,146 @@
+{
+ "allowance": 10000,
+ "today": 18,
+ "month_days": 30,
+ "savings_goal": 500,
+ "transactions": [
+  {
+   "day": 1,
+   "amount": 700,
+   "category": "Travel",
+   "fixed": true
+  },
+  {
+   "day": 1,
+   "amount": 180,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 2,
+   "amount": 650,
+   "category": "Phone and subscriptions",
+   "fixed": true
+  },
+  {
+   "day": 2,
+   "amount": 150,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 3,
+   "amount": 400,
+   "category": "Study material",
+   "fixed": true
+  },
+  {
+   "day": 3,
+   "amount": 220,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 4,
+   "amount": 160,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 5,
+   "amount": 120,
+   "category": "Other"
+  },
+  {
+   "day": 6,
+   "amount": 240,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 6,
+   "amount": 450,
+   "category": "Outings"
+  },
+  {
+   "day": 7,
+   "amount": 260,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 7,
+   "amount": 500,
+   "category": "Outings"
+  },
+  {
+   "day": 8,
+   "amount": 140,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 9,
+   "amount": 170,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 9,
+   "amount": 900,
+   "category": "Shopping"
+  },
+  {
+   "day": 10,
+   "amount": 200,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 11,
+   "amount": 150,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 12,
+   "amount": 180,
+   "category": "Other"
+  },
+  {
+   "day": 13,
+   "amount": 230,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 13,
+   "amount": 400,
+   "category": "Outings"
+  },
+  {
+   "day": 14,
+   "amount": 250,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 14,
+   "amount": 550,
+   "category": "Outings"
+  },
+  {
+   "day": 15,
+   "amount": 160,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 16,
+   "amount": 180,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 16,
+   "amount": 600,
+   "category": "Shopping"
+  },
+  {
+   "day": 17,
+   "amount": 210,
+   "category": "Food beyond the mess"
+  },
+  {
+   "day": 18,
+   "amount": 300,
+   "category": "Food beyond the mess"
+  }
+ ]
+}

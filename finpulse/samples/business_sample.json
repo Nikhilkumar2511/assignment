@@ -1,0 +1,24 @@
+{
+ "period_months": 1,
+ "revenue": 1200000,
+ "cogs": 720000,
+ "operating_expenses": 330000,
+ "depreciation": 20000,
+ "interest": 30000,
+ "tax": 0,
+ "cash": 90000,
+ "receivables": 2600000,
+ "inventory": 900000,
+ "payables": 800000,
+ "short_term_debt": 600000,
+ "long_term_debt": 1200000,
+ "equity": 1500000,
+ "prior": {
+  "revenue": 1000000,
+  "cogs": 560000,
+  "operating_expenses": 290000,
+  "depreciation": 20000,
+  "interest": 30000,
+  "tax": 0
+ }
+}

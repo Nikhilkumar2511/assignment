@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FINPULSE AI demo</title>
+<style>
+  :root { --bg:#f4f7f7; --card:#fff; --ink:#152a3d; --muted:#5b6b78; --line:#d9e2e4; --accent:#0d7a72;
+          --good:#1b7f4b; --watch:#a86a00; --risk:#b3261e; --soft:#e8f2f1; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1a22; --card:#17252f; --ink:#e7eef2; --muted:#9db0bc; --line:#2a3c48; --accent:#4cc3b8;
+            --good:#59c98b; --watch:#e3ad4d; --risk:#f0837b; --soft:#1d323b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding:20px 16px 8px; max-width:1100px; margin:0 auto; }
+  h1 { margin:0; font-size:22px; } h2 { font-size:16px; margin:0 0 10px; } h3 { font-size:14px; margin:16px 0 6px; color:var(--muted); }
+  .sub { color:var(--muted); margin:2px 0 0; }
+  main { max-width:1100px; margin:0 auto; padding:8px 16px 40px; display:grid; gap:16px; grid-template-columns:minmax(0,1fr); }
+  @media (min-width: 900px) { main { grid-template-columns: 400px minmax(0,1fr); align-items:start; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .tabs { display:flex; gap:8px; margin-bottom:12px; }
+  .tabs button { flex:1; padding:8px; border:1px solid var(--line); background:transparent; color:var(--ink); border-radius:8px; cursor:pointer; font:inherit; }
+  .tabs button[aria-selected="true"] { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  label { display:block; font-size:13px; color:var(--muted); margin-top:8px; }
+  input, textarea { width:100%; padding:7px 8px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--ink); font:inherit; }
+  textarea { min-height:190px; font:12.5px/1.45 ui-monospace, Menlo, Consolas, monospace; white-space:pre; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 10px; }
+  .run { margin-top:14px; width:100%; padding:10px; border:0; border-radius:8px; background:var(--accent); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+  .hint { font-size:12.5px; color:var(--muted); margin:6px 0 0; }
+  .score { display:flex; align-items:center; gap:14px; }
+  .dial { width:76px; height:76px; border-radius:50%; display:grid; place-items:center; font-size:24px; font-weight:700; border:6px solid var(--muted); flex:none; }
+  .status { font-size:18px; font-weight:700; }
+  .good { color:var(--good); border-color:var(--good); } .watch { color:var(--watch); border-color:var(--watch); } .risk { color:var(--risk); border-color:var(--risk); }
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(130px,1fr)); gap:8px; margin-top:12px; }
+  .kpi { background:var(--soft); border-radius:8px; padding:8px 10px; } .kpi b { display:block; font-size:17px; } .kpi span { font-size:12px; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; } th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .scroll { overflow-x:auto; }
+  .tgood { color:var(--good); } .twatch { color:var(--watch); } .trisk { color:var(--risk); }
+  .finding { border-left:4px solid var(--muted); padding:6px 10px; margin:8px 0; background:var(--soft); border-radius:0 8px 8px 0; }
+  .finding.urgent { border-color:var(--risk); } .finding.improve { border-color:var(--watch); } .finding.ok { border-color:var(--good); }
+  .finding small { color:var(--muted); display:block; }
+  .tag { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .explain { background:var(--soft); border-radius:8px; padding:10px 12px; margin-top:12px; }
+  .error { color:var(--risk); font-weight:600; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FINPULSE AI</h1>
+  <p class="sub">Financial health diagnosis for a business, and budget diagnosis for a student. Demo data is synthetic.</p>
+</header>
+<main>
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-student" aria-selected="true">Student</button>
+      <button role="tab" id="tab-business" aria-selected="false">Business</button>
+    </div>
+
+    <form id="form-student">
+      <div class="grid2">
+        <div><label for="s-allowance">Monthly allowance</label><input id="s-allowance" type="number" min="1"></div>
+        <div><label for="s-today">Today (day of month)</label><input id="s-today" type="number" min="1" max="31"></div>
+        <div><label for="s-days">Days in month</label><input id="s-days" type="number" min="28" max="31"></div>
+        <div><label for="s-savings">Savings goal</label><input id="s-savings" type="number" min="0"></div>
+      </div>
+      <label for="s-tx">Spending, one per line: day, amount, category, fixed (yes or no)</label>
+      <textarea id="s-tx" spellcheck="false"></textarea>
+      <p class="hint">Mark recurring bills as fixed so they are not projected forward.</p>
+      <button class="run" type="submit">Diagnose my month</button>
+    </form>
+
+    <form id="form-business" hidden>
+      <div class="grid2" id="b-fields"></div>
+      <h3>Previous period (optional, for trends)</h3>
+      <div class="grid2" id="b-prior"></div>
+      <button class="run" type="submit">Diagnose the business</button>
+    </form>
+  </section>
+
+  <section class="card" id="out" aria-live="polite"><p class="sub">Loading sample data.</p></section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const money = n => n == null ? "n/a" : Math.round(n).toLocaleString("en-IN");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const B_FIELDS = [["revenue","Revenue"],["cogs","Cost of goods sold"],["operating_expenses","Operating expenses"],
+  ["depreciation","Depreciation"],["interest","Interest"],["tax","Tax"],["cash","Cash"],["receivables","Receivables"],
+  ["inventory","Inventory"],["payables","Payables"],["short_term_debt","Short-term debt"],["long_term_debt","Long-term debt"],["equity","Equity"]];
+const B_PRIOR = [["revenue","Revenue"],["cogs","Cost of goods sold"],["operating_expenses","Operating expenses"],
+  ["depreciation","Depreciation"],["interest","Interest"],["tax","Tax"]];
+const field = (prefix, [key, label]) => `<div><label for="${prefix}${key}">${label}</label><input id="${prefix}${key}" type="number" min="0"></div>`;
+$("b-fields").innerHTML = B_FIELDS.map(f => field("b-", f)).join("");
+$("b-prior").innerHTML = B_PRIOR.map(f => field("p-", f)).join("");
+
+function show(tab) {
+  for (const t of ["student", "business"]) {
+    $("tab-" + t).setAttribute("aria-selected", t === tab);
+    $("form-" + t).hidden = t !== tab;
+  }
+}
+$("tab-student").onclick = () => { show("student"); runStudent(); };
+$("tab-business").onclick = () => { show("business"); runBusiness(); };
+
+async function post(path, body) {
+  const res = await fetch(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+  const data = await res.json();
+  if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail));
+  return data;
+}
+const cls = status => ({"On track":"good","Healthy":"good","Watch":"watch","At risk":"risk"}[status] || "");
+const fcls = p => p === "Urgent action" ? "urgent" : p === "Investigate and improve" ? "improve" : p === "Monitor" || p === "Evaluate investment" ? "ok" : "";
+const head = h => `<div class="score"><div class="dial ${cls(h.status)}">${h.score == null ? "?" : Math.round(h.score)}</div>
+  <div><div class="status ${cls(h.status)}">${esc(h.status)}</div><div class="sub">Health score out of 100${h.note ? ". " + esc(h.note) : ""}</div></div></div>`;
+const findings = list => "<h3>What to do, in order</h3>" + list.map(f => `<div class="finding ${fcls(f.priority)}">
+  <span class="tag">${esc(f.priority)}</span><div><b>${esc(f.title)}</b></div><div>${esc(f.rationale)}</div><small>Next step: ${esc(f.next_step)}</small></div>`).join("");
+const fail = e => { $("out").innerHTML = `<p class="error">Could not run the diagnosis: ${esc(e.message)}</p>`; };
+
+async function runStudent(ev) {
+  if (ev) ev.preventDefault();
+  const transactions = $("s-tx").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+    const [day, amount, category, fixed] = l.split(",").map(x => x.trim());
+    return {day: Number(day), amount: Number(amount), category: category || null, fixed: /^(y|yes|true|1)$/i.test(fixed || "")};
+  });
+  const body = {allowance: Number($("s-allowance").value), today: Number($("s-today").value), month_days: Number($("s-days").value), transactions};
+  if ($("s-savings").value !== "") body.savings_goal = Number($("s-savings").value);
+  try {
+    const r = await post("/api/student/diagnose", body);
+    if (r.health.score == null) { $("out").innerHTML = head(r.health) + findings(r.findings); return; }
+    const kpi = (v, l) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`;
+    $("out").innerHTML = head(r.health)
+      + `<div class="explain">${esc(r.explanation)}</div><div class="kpis">`
+      + kpi(money(r.summary.balance), "Balance left") + kpi(r.run_out.day ? "Day " + r.run_out.day : "Lasts the month", "Money runs out")
+      + kpi(Math.floor(r.run_out.safe_to_spend_per_day).toLocaleString("en-IN"), "Safe to spend per day") + kpi(Math.round(100 * r.warning.probability) + "%", "Chance of running short")
+      + "</div>" + findings(r.findings)
+      + `<h3>Where the money went</h3><div class="scroll"><table><tr><th>Category</th><th class="num">Spent</th><th class="num">Share</th><th>Type</th></tr>`
+      + r.categories.map(c => `<tr><td>${esc(c.category)}</td><td class="num">${money(c.amount)}</td><td class="num">${Math.round(100 * c.share)}%</td><td>${c.fixed ? "Fixed bill" : "Flexible"}</td></tr>`).join("")
+      + `</table></div><h3>Budget for next month</h3><div class="scroll"><table><tr><th>Line</th><th class="num">Amount</th><th class="num">Change from this month's pace</th></tr>`
+      + r.next_month_budget.lines.map(l => `<tr><td>${esc(l.line)}</td><td class="num">${money(l.amount)}</td><td class="num">${l.change_vs_current_pace == null ? "" : money(l.change_vs_current_pace)}</td></tr>`).join("")
+      + `<tr><th>Total</th><th class="num">${money(r.next_month_budget.total)}</th><th></th></tr></table></div>`
+      + `<p class="hint">Flexible spending: ${money(r.next_month_budget.flexible_per_day)} a day, ${money(r.next_month_budget.flexible_per_week)} a week. ${esc(r.next_month_budget.method)}</p>`;
+  } catch (e) { fail(e); }
+}
+
+async function runBusiness(ev) {
+  if (ev) ev.preventDefault();
+  const read = (prefix, fields) => Object.fromEntries(fields.map(([k]) => [k, $(prefix + k).value]).filter(([, v]) => v !== "").map(([k, v]) => [k, Number(v)]));
+  const body = read("b-", B_FIELDS), prior = read("p-", B_PRIOR);
+  if (Object.keys(prior).length) body.prior = prior;
+  try {
+    const r = await post("/api/business/diagnose", body);
+    const fmt = m => m.unit === "share" ? (100 * m.value).toFixed(1) + "%" : m.unit === "currency" ? money(m.value) : m.value.toFixed(2) + " " + m.unit;
+    $("out").innerHTML = head(r.health) + `<div class="explain">${esc(r.explanation)}</div><div class="kpis">`
+      + r.areas.map(a => `<div class="kpi"><b>${a.score == null ? "n/a" : Math.round(a.score)}</b><span>${esc(a.area)}</span></div>`).join("") + "</div>"
+      + findings(r.findings)
+      + `<h3>Measures</h3><div class="scroll"><table><tr><th>Measure</th><th class="num">Value</th><th>Band</th></tr>`
+      + r.metrics.map(m => `<tr><td>${esc(m.metric.replace(/_/g, " "))}</td><td class="num">${fmt(m)}</td><td class="${m.band === "good" ? "tgood" : m.band === "poor" ? "trisk" : m.band ? "twatch" : ""}">${m.band || ""}</td></tr>`).join("")
+      + `</table></div><p class="hint">${esc(r.thresholds_note)}${r.assumptions.length ? " Assumptions: " + esc(r.assumptions.join(" ")) : ""}</p>`;
+  } catch (e) { fail(e); }
+}
+$("form-student").onsubmit = runStudent;
+$("form-business").onsubmit = runBusiness;
+
+(async () => {
+  const [s, b] = await Promise.all([fetch("/api/samples/student").then(r => r.json()), fetch("/api/samples/business").then(r => r.json())]);
+  $("s-allowance").value = s.allowance; $("s-today").value = s.today; $("s-days").value = s.month_days; $("s-savings").value = s.savings_goal;
+  $("s-tx").value = s.transactions.map(t => [t.day, t.amount, t.category, t.fixed ? "yes" : "no"].join(", ")).join("\n");
+  for (const [k] of B_FIELDS) if (b[k] != null) $("b-" + k).value = b[k];
+  for (const [k] of B_PRIOR) if (b.prior && b.prior[k] != null) $("p-" + k).value = b.prior[k];
+  runStudent();
+})().catch(fail);
+</script>
+</body>
+</html>

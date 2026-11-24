@@ -1,0 +1,39 @@
+{
+  "version": "0.1-synthetic",
+  "features": [
+    "spent_share",
+    "time_share",
+    "need_ratio_tagged",
+    "need_ratio_recent",
+    "fixed_share",
+    "largest_spend_share"
+  ],
+  "mean": [
+    0.5201167217403352,
+    0.4080892926698372,
+    1.1618273872726546,
+    1.4520581984247163,
+    0.18954033881830712,
+    0.0982488112110599
+  ],
+  "std": [
+    0.1797311914790245,
+    0.15170977411340847,
+    1.1951408352112924,
+    1.3081533807596482,
+    0.04032764977574349,
+    0.07722147887511586
+  ],
+  "weights": [
+    2.8330467084122413,
+    -1.890153518061813,
+    0.867968005912925,
+    0.07481832510415226,
+    -0.2757120638391371,
+    -0.892304339016022
+  ],
+  "bias": -1.0461340810309052,
+  "threshold": 0.32,
+  "trained_on": "113,813 synthetic student-months, seed 101",
+  "label": "balance under 5% of the allowance on or before five days from month end"
+}

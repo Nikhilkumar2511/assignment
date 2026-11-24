@@ -1,0 +1,37 @@
+{
+ "discount_rate": 0.12,
+ "cash": 900000,
+ "reserve": 300000,
+ "options": [
+  {
+   "name": "Second packing line",
+   "initial_cost": 500000,
+   "cash_flows": [
+    180000,
+    200000,
+    220000,
+    220000
+   ]
+  },
+  {
+   "name": "New delivery van",
+   "initial_cost": 400000,
+   "cash_flows": [
+    110000,
+    120000,
+    120000,
+    120000
+   ]
+  },
+  {
+   "name": "Warehouse extension",
+   "initial_cost": 800000,
+   "cash_flows": [
+    260000,
+    300000,
+    320000,
+    320000
+   ]
+  }
+ ]
+}
