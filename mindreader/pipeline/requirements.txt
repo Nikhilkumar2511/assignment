@@ -1,0 +1,10 @@
+orjson>=3.10
+pyarrow>=17
+duckdb>=1.1
+numpy>=1.26
+psycopg[binary]>=3.2
+httpx>=0.27
+pillow>=11.3          # 11.3+ reads and writes AVIF natively
+anthropic>=1.0
+# tests
+pytest>=8
