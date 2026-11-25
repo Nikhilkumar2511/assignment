@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MindReader</title>
+  <meta name="description" content="Think of a real or fictional character. MindReader asks questions and guesses who it is.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='44' fill='%237c5cff'/><circle cx='38' cy='38' r='12' fill='%23ffffff' opacity='.55'/></svg>">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="card" id="app">
+    <header class="brand">
+      <div class="orb" id="orb" aria-hidden="true"><span class="orb-shine"></span></div>
+      <h1>MindReader</h1>
+    </header>
+
+    <!-- Start -->
+    <section id="screen-start" class="screen">
+      <p class="lead">Think of a real person or a fictional character. Answer my questions and I will try to guess who it is.</p>
+      <button class="btn primary big" id="btn-start">Start a game</button>
+      <p class="muted small" id="stats"></p>
+    </section>
+
+    <!-- Question -->
+    <section id="screen-question" class="screen" hidden>
+      <p class="step" id="q-step">Question 1</p>
+      <h2 class="question" id="q-text" aria-live="polite"></h2>
+      <div class="answers" role="group" aria-label="Answers">
+        <button class="btn ans" data-answer="yes"><kbd>1</kbd>Yes</button>
+        <button class="btn ans" data-answer="no"><kbd>2</kbd>No</button>
+        <button class="btn ans" data-answer="dont_know"><kbd>3</kbd>Don't know</button>
+        <button class="btn ans" data-answer="probably"><kbd>4</kbd>Probably</button>
+        <button class="btn ans" data-answer="probably_not"><kbd>5</kbd>Probably not</button>
+      </div>
+      <div class="meter" aria-label="How sure I am">
+        <div class="meter-label"><span>How sure I am</span><span id="conf-text">0%</span></div>
+        <div class="meter-track"><div class="meter-fill" id="conf-fill"></div></div>
+      </div>
+      <div class="row between">
+        <button class="btn link" id="btn-undo" disabled>Undo last answer</button>
+        <button class="btn link" id="btn-quit">Start over</button>
+      </div>
+    </section>
+
+    <!-- Guess -->
+    <section id="screen-guess" class="screen" hidden>
+      <p class="step" id="g-step">My guess</p>
+      <p class="muted">I think you are thinking of</p>
+      <h2 class="guess-name" id="g-name"></h2>
+      <p class="guess-desc" id="g-desc"></p>
+      <p>Am I right?</p>
+      <div class="row">
+        <button class="btn primary" id="btn-right">Yes, that's it</button>
+        <button class="btn" id="btn-wrong">No</button>
+      </div>
+      <button class="btn link" id="btn-undo-guess">Undo last answer</button>
+    </section>
+
+    <!-- Won -->
+    <section id="screen-won" class="screen" hidden>
+      <h2>Got it!</h2>
+      <p id="won-text"></p>
+      <button class="btn primary big" data-action="restart">Play again</button>
+    </section>
+
+    <!-- Lost -->
+    <section id="screen-lost" class="screen" hidden>
+      <h2>You beat me.</h2>
+      <div id="teach-box">
+        <p>Who were you thinking of? Telling me helps me guess it next time.</p>
+        <label for="teach-input" class="sr-only">Character name</label>
+        <input id="teach-input" type="text" autocomplete="off" maxlength="60" placeholder="Type a name">
+        <ul class="suggestions" id="suggestions" role="listbox"></ul>
+        <div id="new-char" hidden>
+          <label for="teach-desc" class="small muted">New to me. Add a short description (optional):</label>
+          <input id="teach-desc" type="text" maxlength="140" placeholder="e.g. Detective from a Japanese anime">
+        </div>
+        <div class="row">
+          <button class="btn primary" id="btn-teach" disabled>Teach me</button>
+          <button class="btn" data-action="restart">Skip</button>
+        </div>
+      </div>
+      <div id="teach-done" hidden>
+        <p id="teach-msg"></p>
+        <button class="btn primary big" data-action="restart">Play again</button>
+      </div>
+    </section>
+
+    <p class="error" id="error" role="alert" hidden></p>
+  </main>
+  <footer class="foot small muted">MindReader learns from every game. No sign-up, no tracking.</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

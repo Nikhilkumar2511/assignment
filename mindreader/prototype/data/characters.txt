@@ -1,0 +1,282 @@
+# Seed knowledge base: one character per line.
+# Format:  Name | popularity (1-100) | short description | tags
+# Tag syntax:  tag = yes (p 0.95)   ~tag = unsure (p 0.5)   !tag = definite no (p 0.03)
+# Missing tags use the question's default (usually p 0.08).
+# Implied tags (for example marvel -> from_comic, from_film) are added by app/seed.py.
+# Real people need the "real" tag. They count as alive unless tagged "dead" or "historical".
+
+# ---------- Real people: science, tech, business ----------
+Albert Einstein | 95 | German-born physicist behind the theory of relativity | real male scientist genius elderly european ~american nobel dead
+Isaac Newton | 85 | English physicist who described gravity | real male scientist genius historical british ~inventor
+Leonardo da Vinci | 85 | Italian Renaissance painter of the Mona Lisa | real male artist inventor ~scientist genius historical european beard elderly
+Nikola Tesla | 80 | Inventor known for alternating current electricity | real male inventor scientist genius european ~american dead
+Marie Curie | 75 | Physicist and chemist who won two Nobel Prizes | real female scientist european nobel genius dead
+Stephen Hawking | 80 | British physicist who studied black holes | real male scientist genius british glasses space dead writer
+Charles Darwin | 70 | Naturalist behind the theory of evolution | real male scientist historical british beard elderly bald
+A. P. J. Abdul Kalam | 80 | Missile scientist and former President of India | real male scientist politician head_of_state indian dead elderly ~space ~writer
+Kalpana Chawla | 55 | First Indian-born woman in space | real female space indian ~american dead ~scientist
+Neil Armstrong | 70 | First person to walk on the Moon | real male space american dead ~military
+Elon Musk | 95 | Entrepreneur behind Tesla, SpaceX and X | real male business tech billionaire space car american ~african ~inventor ~youtuber
+Bill Gates | 85 | Co-founder of Microsoft | real male business tech billionaire american glasses elderly ~activist
+Steve Jobs | 85 | Co-founder of Apple | real male business tech billionaire american glasses dead ~inventor
+Mark Zuckerberg | 85 | Founder of Facebook and CEO of Meta | real male business tech billionaire american
+Jeff Bezos | 75 | Founder of Amazon | real male business tech billionaire american bald space
+Sundar Pichai | 65 | CEO of Google | real male business tech indian ~american
+Ratan Tata | 70 | Former chairman of the Tata Group | real male business indian dead elderly ~billionaire car
+Mukesh Ambani | 70 | Chairman of Reliance Industries | real male business billionaire indian
+Walt Disney | 65 | Founder of the Disney company | real male business director american dead
+Magnus Carlsen | 55 | Norwegian chess world champion | real male european genius
+
+# ---------- Real people: music ----------
+Taylor Swift | 95 | American pop and country singer-songwriter | real female musician american blonde ~writer billionaire
+Beyonce | 85 | American singer, formerly of Destiny's Child | real female musician american band dancer ~actor billionaire
+Rihanna | 85 | Barbadian singer and founder of Fenty Beauty | real female musician business billionaire latin_american ~actor
+Michael Jackson | 95 | The King of Pop | real male musician dancer american dead band hat
+Elvis Presley | 80 | The King of Rock and Roll | real male musician actor american dead dancer
+Freddie Mercury | 75 | Lead singer of Queen | real male musician band british dead
+John Lennon | 70 | Singer and songwriter of The Beatles | real male musician band british dead glasses activist
+Eminem | 85 | American rapper | real male rapper american blonde
+Drake | 75 | Canadian rapper and singer | real male rapper musician beard ~american
+Justin Bieber | 85 | Canadian pop singer discovered on YouTube | real male musician ~youtuber ~american
+Ed Sheeran | 75 | British singer-songwriter | real male musician british red_hair ~beard
+Lady Gaga | 80 | American singer and actress | real female musician actor american blonde
+Billie Eilish | 75 | American singer-songwriter | real female musician american born_after_1990
+Shakira | 75 | Colombian singer famous for her dancing | real female musician latin_american dancer ~blonde
+Ariana Grande | 75 | American singer and actress | real female musician actor american born_after_1990
+Selena Gomez | 60 | American singer and actress | real female musician actor american born_after_1990 business
+Jungkook | 65 | Singer in the K-pop group BTS | real male musician band dancer asian_other born_after_1990
+A. R. Rahman | 65 | Oscar-winning Indian composer | real male musician indian bollywood
+Lata Mangeshkar | 65 | Legendary Indian playback singer | real female musician indian bollywood dead elderly
+Arijit Singh | 70 | Indian playback singer | real male musician indian bollywood beard
+Mozart | 65 | Classical composer from Austria | real male composer musician european historical genius
+Beethoven | 60 | Classical composer who went deaf | real male composer musician european historical
+
+# ---------- Real people: sport ----------
+Cristiano Ronaldo | 98 | Portuguese footballer | real male football european billionaire ~youtuber strong
+Lionel Messi | 98 | Argentine footballer | real male football latin_american beard ~billionaire
+Neymar | 75 | Brazilian footballer | real male football latin_american
+Kylian Mbappe | 70 | French footballer | real male football european born_after_1990 speed
+Pele | 65 | Brazilian football legend | real male football latin_american dead elderly
+Michael Jordan | 85 | Basketball legend | real male basketball american bald billionaire olympic
+LeBron James | 80 | NBA basketball star | real male basketball american beard olympic strong
+Usain Bolt | 80 | Jamaican sprinter, the fastest man ever timed | real male athlete olympic speed latin_american
+Serena Williams | 70 | Tennis champion | real female tennis american olympic strong
+Roger Federer | 75 | Swiss tennis legend | real male tennis european olympic
+Muhammad Ali | 80 | Boxing legend | real male fighter american dead olympic activist
+Mike Tyson | 75 | Heavyweight boxing champion | real male fighter american bald strong
+Conor McGregor | 55 | Irish UFC fighter | real male fighter european beard red_hair
+Lewis Hamilton | 70 | Formula One champion | real male racing british car speed
+Virat Kohli | 90 | Indian cricket star | real male cricket indian beard
+Sachin Tendulkar | 85 | Indian cricket legend | real male cricket indian
+MS Dhoni | 85 | Former Indian cricket captain | real male cricket indian ~military
+Rohit Sharma | 70 | Indian cricket captain | real male cricket indian beard
+Neeraj Chopra | 65 | Indian javelin Olympic champion | real male athlete indian olympic military born_after_1990
+
+# ---------- Real people: film and TV ----------
+Leonardo DiCaprio | 85 | Actor from Titanic and Inception | real male actor american blonde activist ~beard
+Tom Cruise | 85 | Actor from Mission: Impossible | real male actor american
+Brad Pitt | 75 | American actor | real male actor american blonde ~elderly
+Johnny Depp | 75 | Actor who played Jack Sparrow | real male actor american hat ~musician ~beard
+Dwayne Johnson | 85 | Wrestler turned actor, known as The Rock | real male actor ~fighter american bald strong
+Will Smith | 75 | Actor and rapper | real male actor rapper american ~comedian
+Keanu Reeves | 75 | Actor from The Matrix and John Wick | real male actor beard ~american gun
+Scarlett Johansson | 70 | Actress who played Black Widow | real female actor american
+Angelina Jolie | 70 | Actress and humanitarian | real female actor american activist
+Jackie Chan | 80 | Martial arts film star from Hong Kong | real male actor fighter asian_other comedian elderly
+Bruce Lee | 75 | Martial arts legend and actor | real male actor fighter asian_other ~american dead
+Charlie Chaplin | 70 | Silent film comedian | real male actor comedian director british dead hat
+Marilyn Monroe | 70 | 1950s film star | real female actor american blonde dead
+Morgan Freeman | 65 | Actor famous for his voice | real male actor american elderly
+Robert Downey Jr. | 80 | Actor who played Iron Man | real male actor american beard
+Tom Holland | 75 | Actor who played Spider-Man | real male actor british born_after_1990 ~dancer
+Zendaya | 70 | Actress and singer | real female actor musician american born_after_1990
+Emma Watson | 75 | Actress who played Hermione | real female actor british activist born_after_1990
+Daniel Radcliffe | 65 | Actor who played Harry Potter | real male actor british
+Rowan Atkinson | 65 | British comedian who plays Mr. Bean | real male actor comedian british elderly
+Kim Kardashian | 70 | Reality TV star and businesswoman | real female youtuber business billionaire american
+Oprah Winfrey | 65 | Talk show host | real female tv_host business billionaire american elderly
+MrBeast | 85 | YouTuber known for huge challenges | real male youtuber business american born_after_1990 beard ~billionaire
+PewDiePie | 65 | Swedish YouTuber | real male youtuber european born_after_1990 beard comedian
+CarryMinati | 60 | Indian YouTuber and comedian | real male youtuber comedian indian born_after_1990
+Steven Spielberg | 60 | Director of Jaws and Jurassic Park | real male director american elderly glasses beard
+Christopher Nolan | 60 | Director of Inception and The Dark Knight | real male director british
+Stan Lee | 60 | Co-creator of many Marvel heroes | real male writer american dead glasses elderly
+
+# ---------- Real people: Indian cinema ----------
+Shah Rukh Khan | 95 | Bollywood superstar known as King Khan | real male actor bollywood indian ~billionaire business
+Amitabh Bachchan | 90 | Bollywood legend and quiz show host | real male actor bollywood indian elderly beard tv_host
+Salman Khan | 85 | Bollywood action star | real male actor bollywood indian strong tv_host
+Akshay Kumar | 75 | Bollywood action and comedy actor | real male actor bollywood indian ~fighter ~comedian
+Hrithik Roshan | 70 | Bollywood actor and dancer | real male actor bollywood indian dancer
+Deepika Padukone | 75 | Bollywood actress | real female actor bollywood indian
+Priyanka Chopra | 75 | Actress and former Miss World | real female actor bollywood indian ~musician ~american
+Alia Bhatt | 70 | Bollywood actress | real female actor bollywood indian born_after_1990
+Rajinikanth | 80 | Tamil cinema superstar | real male actor indian elderly ~bollywood ~bald
+Allu Arjun | 70 | Telugu star of Pushpa | real male actor indian dancer ~bollywood beard
+Prabhas | 65 | Star of Baahubali | real male actor indian ~bollywood sword beard
+
+# ---------- Real people: politics, history, culture ----------
+Narendra Modi | 90 | Prime Minister of India | real male politician head_of_state indian elderly beard
+Mahatma Gandhi | 90 | Leader of India's independence movement | real male activist politician indian dead bald glasses elderly
+Bhagat Singh | 70 | Indian revolutionary freedom fighter | real male activist indian dead hat ~military
+Swami Vivekananda | 60 | Indian monk and philosopher | real male indian historical ~writer
+Rabindranath Tagore | 60 | Nobel-winning Bengali poet | real male writer indian dead beard nobel elderly
+Mother Teresa | 60 | Catholic nun who helped the poor in Kolkata | real female activist european ~indian dead elderly nobel
+Barack Obama | 90 | 44th President of the United States | real male politician head_of_state american nobel ~writer
+Donald Trump | 90 | US President and businessman | real male politician head_of_state business billionaire american blonde elderly tv_host
+Abraham Lincoln | 70 | 16th US President who ended slavery | real male politician head_of_state american historical beard hat
+George Washington | 60 | First President of the United States | real male politician head_of_state american historical military
+Winston Churchill | 65 | British Prime Minister during World War II | real male politician head_of_state british dead elderly bald military hat writer nobel
+Nelson Mandela | 70 | Anti-apartheid leader and President of South Africa | real male politician head_of_state activist african dead elderly nobel
+Vladimir Putin | 75 | President of Russia | real male politician head_of_state ~european elderly ~bald ~military
+Queen Elizabeth II | 80 | Longest-reigning British monarch | real female royalty british dead elderly hat
+King Charles III | 60 | King of the United Kingdom | real male royalty british elderly
+Princess Diana | 65 | Princess of Wales | real female royalty british dead blonde activist
+Napoleon Bonaparte | 70 | French emperor and military leader | real male military head_of_state politician european historical hat ~royalty
+Julius Caesar | 60 | Roman general and dictator | real male military politician head_of_state european historical
+Cleopatra | 65 | Last pharaoh of ancient Egypt | real female royalty african historical head_of_state
+Martin Luther King Jr. | 70 | US civil rights leader | real male activist american dead nobel
+Malala Yousafzai | 60 | Pakistani activist for girls' education | real female activist asian_other nobel born_after_1990 writer
+Greta Thunberg | 60 | Swedish climate activist | real female activist european born_after_1990
+William Shakespeare | 75 | English playwright | real male writer british historical beard ~bald
+J. K. Rowling | 65 | Author of Harry Potter | real female writer british ~billionaire blonde
+Pablo Picasso | 60 | Spanish painter | real male artist european dead bald elderly
+Vincent van Gogh | 65 | Dutch painter of The Starry Night | real male artist european historical beard red_hair
+
+# ---------- Fictional: Harry Potter ----------
+Harry Potter | 95 | Boy wizard who survived Voldemort | harry_potter male human child school glasses orphan sidekick ~flies ~sword
+Hermione Granger | 80 | Brilliant witch and Harry's best friend | harry_potter female human child school genius
+Ron Weasley | 70 | Harry's loyal best friend | harry_potter male human child school red_hair ~comedian
+Albus Dumbledore | 75 | Headmaster of Hogwarts | harry_potter male human elderly beard hat glasses
+Lord Voldemort | 80 | Dark wizard who wants to rule the world | harry_potter male human villain bald
+Rubeus Hagrid | 60 | Half-giant gamekeeper of Hogwarts | harry_potter male giant beard ~human
+Severus Snape | 65 | Potions master at Hogwarts | harry_potter male human ~villain
+
+# ---------- Fictional: Marvel ----------
+Spider-Man | 98 | Teenage hero who swings on webs | marvel male human superhero superpowers mask wears_red ~child school orphan
+Iron Man | 95 | Billionaire genius in a high-tech suit | marvel male human superhero billionaire genius inventor flies mask wears_red beard ~tech
+Captain America | 85 | Super soldier with a round shield | marvel male human superhero ~superpowers military strong blonde
+Thor | 80 | Norse god of thunder with a hammer | marvel male superhero superpowers flies strong blonde cape beard ~human royalty
+Hulk | 85 | Scientist who turns into a giant green monster | marvel male superhero superpowers green giant strong scientist ~human ~monster
+Black Widow | 65 | Russian spy turned Avenger | marvel female human superhero detective gun red_hair european
+Thanos | 80 | Titan villain who collected the Infinity Stones | marvel male villain giant strong alien space superpowers bald
+Loki | 70 | Trickster god and Thor's brother | marvel male villain magic superpowers ~human royalty
+Black Panther | 70 | King of Wakanda | marvel male human superhero royalty african mask ~superpowers strong ~head_of_state
+Deadpool | 75 | Wisecracking mercenary who cannot die | marvel male human superhero ~villain superpowers mask wears_red comedian sword gun
+Wolverine | 70 | Mutant with metal claws | marvel male human superhero superpowers strong
+Doctor Strange | 60 | Sorcerer Supreme | marvel male human superhero magic cape beard
+# ---------- Fictional: DC ----------
+Batman | 98 | Billionaire who fights crime in Gotham | dc male human superhero billionaire mask cape detective genius orphan sidekick
+Superman | 95 | Hero from the planet Krypton | dc male superhero superpowers flies strong alien cape wears_red ~human orphan
+Wonder Woman | 80 | Amazon warrior princess | dc female superhero superpowers strong royalty sword ~human
+The Joker | 90 | Batman's clown villain | dc male human villain comedian ~green gun
+Harley Quinn | 65 | The Joker's chaotic partner | dc female human villain blonde comedian
+The Flash | 65 | The fastest man alive | dc male human superhero superpowers speed wears_red mask
+
+# ---------- Fictional: Star Wars ----------
+Darth Vader | 95 | Sith Lord in black armor | star_wars male human villain mask cape sword superpowers ~magic
+Yoda | 85 | Wise Jedi master | star_wars male small green elderly sword superpowers alien
+Luke Skywalker | 75 | Jedi from Tatooine | star_wars male human sword superpowers blonde orphan
+Princess Leia | 70 | Leader of the Rebellion | star_wars female human royalty gun
+Chewbacca | 65 | Wookiee co-pilot of the Millennium Falcon | star_wars male alien giant ~animal !speaks sidekick
+R2-D2 | 65 | Small astromech droid | star_wars robot small !speaks ~blue
+Grogu | 65 | Small green alien known as Baby Yoda | star_wars male small green alien child superpowers !speaks
+
+# ---------- Fictional: video games ----------
+Mario | 98 | Italian plumber who saves Princess Peach | nintendo male human hat wears_red ~european sidekick
+Luigi | 70 | Mario's taller brother in green | nintendo male human hat ~european
+Princess Peach | 70 | Princess of the Mushroom Kingdom | nintendo female human royalty blonde
+Bowser | 70 | King of the Koopas | nintendo male villain monster giant royalty red_hair ~animal ~green strong
+Link | 70 | Hero of Hyrule with sword and shield | nintendo male sword hat blonde ~human
+Kirby | 60 | Pink puffball from Nintendo games | nintendo small ~flies !speaks
+Pikachu | 95 | Electric mouse Pokemon | pokemon animal mouse yellow small superpowers ~speaks
+Ash Ketchum | 70 | Pokemon trainer from Pallet Town | pokemon male human child hat sidekick
+Sonic the Hedgehog | 85 | Super-fast blue hedgehog | from_game japanese male animal blue speed sidekick
+Pac-Man | 65 | Yellow circle who eats dots | from_game yellow ~japanese small !speaks
+Steve (Minecraft) | 70 | Default player character of Minecraft | from_game male human sword ~european
+Master Chief | 55 | Armored super soldier from Halo | from_game male human military gun mask strong ~american space
+Kratos | 60 | Spartan warrior from God of War | from_game male strong bald beard ~human superpowers ~villain ~european
+Lara Croft | 65 | Tomb-raiding adventurer | from_game female human british gun ~from_film
+
+# ---------- Fictional: anime and Japanese cartoons ----------
+Naruto Uzumaki | 85 | Ninja who dreams of becoming Hokage | from_anime male human fighter blonde orphan superpowers child
+Goku | 90 | Saiyan warrior from Dragon Ball | from_anime male fighter superpowers strong alien flies ~human
+Monkey D. Luffy | 80 | Rubber pirate captain from One Piece | from_anime male human pirate superpowers hat wears_red fighter
+Tanjiro Kamado | 60 | Demon slayer with a sword | from_anime male human sword child
+Doraemon | 85 | Robot cat from the future | from_anime robot ~cat blue kids_show sidekick small
+Nobita Nobi | 65 | Lazy boy helped by Doraemon | from_anime male human child school glasses kids_show sidekick
+Shinchan | 80 | Naughty five-year-old boy | from_anime male human child comedian kids_show
+Totoro | 55 | Forest spirit from a Studio Ghibli film | from_anime from_film giant ~animal ~bear ~cat !speaks kids_show
+Hello Kitty | 55 | White cartoon cat with a red bow | japanese cartoon female cat kids_show small !speaks
+
+# ---------- Fictional: Disney and Pixar ----------
+Mickey Mouse | 95 | Disney's famous cartoon mouse | disney cartoon male mouse american kids_show
+Donald Duck | 75 | Short-tempered Disney duck | disney cartoon male bird american hat ~blue
+Simba | 75 | Lion cub who becomes king | disney cartoon male animal cat royalty african ~orphan
+Elsa | 85 | Ice queen from Frozen | disney cartoon female human royalty magic blonde superpowers ~musician
+Olaf | 65 | Talking snowman from Frozen | disney cartoon male comedian small sidekick
+Ariel | 65 | Mermaid princess | disney cartoon female royalty sea red_hair ~human ~musician
+Cinderella | 65 | Girl who goes to the royal ball | disney cartoon female human royalty blonde orphan ~from_book ~magic
+Genie | 60 | Blue genie of the lamp | disney cartoon male blue magic superpowers comedian flies giant
+Buzz Lightyear | 75 | Space ranger toy from Toy Story | disney cartoon male space ~flies ~robot sidekick
+Woody | 70 | Cowboy toy from Toy Story | disney cartoon male hat ~american sidekick
+Lightning McQueen | 60 | Racing car from Cars | disney cartoon male car speed wears_red racing ~robot
+Nemo | 60 | Small clownfish | disney cartoon male animal sea child small
+Stitch | 65 | Blue alien experiment | disney cartoon male alien blue small ~animal ~speaks
+WALL-E | 55 | Lonely trash-compacting robot | disney cartoon robot small space ~speaks
+Jack Sparrow | 80 | Pirate captain of the Black Pearl | disney male human pirate sword gun hat beard ~british comedian
+Winnie the Pooh | 65 | Honey-loving bear | disney cartoon from_book male bear kids_show yellow ~british sidekick
+Pinocchio | 60 | Wooden puppet who wants to be a real boy | disney cartoon from_book male child european magic
+Peter Pan | 60 | Boy who never grows up | disney cartoon from_book male human child flies hat sword british
+Captain Hook | 50 | Pirate captain with a hook for a hand | disney cartoon from_book male human pirate villain sword hat british
+Alice | 55 | Girl who falls into Wonderland | disney cartoon from_book female human child blonde british
+Mowgli | 55 | Boy raised by wolves in the jungle | disney cartoon from_book male human child indian sidekick
+
+# ---------- Fictional: other cartoons ----------
+Shrek | 80 | Grumpy green ogre | from_film cartoon male monster green giant comedian sidekick
+Donkey | 55 | Talkative donkey from Shrek | from_film cartoon male animal comedian sidekick
+Minions | 70 | Small yellow henchmen | from_film cartoon yellow small comedian ~villain ~glasses ~speaks
+Gru | 60 | Supervillain who becomes a dad | from_film cartoon male human villain bald
+Po | 60 | Panda who becomes the Dragon Warrior in Kung Fu Panda | from_film cartoon male bear fighter comedian asian_other
+Homer Simpson | 85 | Father from The Simpsons | from_tv cartoon male human yellow american comedian bald
+Bart Simpson | 70 | Mischievous kid from The Simpsons | from_tv cartoon male human yellow american comedian child school
+SpongeBob SquarePants | 90 | Sea sponge who lives in a pineapple | from_tv cartoon male sea yellow comedian kids_show american sidekick
+Patrick Star | 65 | SpongeBob's starfish best friend | from_tv cartoon male sea animal comedian sidekick
+Tom | 80 | Cat from Tom and Jerry who always chases Jerry | from_tv cartoon male cat comedian american ~blue ~speaks
+Jerry | 75 | Clever little mouse from Tom and Jerry | from_tv cartoon male mouse comedian small american !speaks
+Bugs Bunny | 70 | Wisecracking cartoon rabbit | from_tv cartoon male animal comedian american
+Scooby-Doo | 70 | Cowardly Great Dane who solves mysteries | from_tv cartoon male dog detective comedian sidekick american
+Garfield | 60 | Lazy orange cat who loves lasagna | from_comic cartoon male cat comedian american ~speaks
+Snoopy | 55 | Beagle from Peanuts | from_comic cartoon male dog american !speaks
+Peppa Pig | 70 | Little pig from the kids' show | from_tv cartoon female animal kids_show british child
+Chhota Bheem | 75 | Strong boy from Dholakpur | from_tv cartoon male human indian strong child kids_show
+Motu | 55 | Samosa-loving hero of Motu Patlu | from_tv cartoon male human indian comedian sidekick
+Dora the Explorer | 60 | Young explorer with a backpack | from_tv cartoon female human child kids_show latin_american
+Ben 10 | 55 | Boy with an alien-changing watch | from_tv cartoon male human child superpowers american
+
+# ---------- Fictional: books, film and TV ----------
+Sherlock Holmes | 85 | Brilliant detective of Baker Street | from_book from_film from_tv male human detective genius british hat sidekick
+James Bond | 85 | British secret agent 007 | from_book from_film male human detective gun british military car
+Frodo Baggins | 70 | Hobbit who carries the One Ring | lotr male small sidekick ~human
+Gandalf | 80 | Wise wizard of Middle-earth | lotr male magic beard elderly hat sword ~human
+Gollum | 65 | Creature obsessed with the Ring | lotr male monster villain small bald
+Jon Snow | 70 | Sworn brother of the Night's Watch | from_tv from_book male human sword beard ~orphan
+Daenerys Targaryen | 65 | Mother of Dragons | from_tv from_book female human royalty blonde
+Walter White | 70 | Chemistry teacher turned drug lord | from_tv male human villain bald glasses scientist genius ~beard american
+Eleven | 65 | Girl with psychic powers from Stranger Things | from_tv female human child superpowers american
+Sheldon Cooper | 70 | Physicist from The Big Bang Theory | from_tv male human scientist genius comedian american
+Mr. Bean | 80 | Silent, clumsy man in a brown suit | from_tv from_film male human british comedian ~car ~speaks
+Dracula | 65 | Vampire count from Transylvania | from_book from_film horror male monster villain cape european ~flies
+Frankenstein's monster | 55 | Creature brought to life by a scientist | from_book from_film horror male monster giant green ~speaks
+Pennywise | 60 | Evil clown from It | from_book from_film horror male monster villain
+Godzilla | 65 | Giant prehistoric monster | from_film japanese monster giant ~green ~animal !speaks
+King Kong | 55 | Giant gorilla | from_film male animal giant strong !speaks
+Optimus Prime | 65 | Leader of the Autobots | from_film from_tv cartoon male robot car giant
+The Terminator | 60 | Cyborg assassin from the future | from_film male robot gun strong ~villain
+Barbie | 70 | Fashion doll | from_film female blonde ~human
+Santa Claus | 80 | Brings presents at Christmas | male beard elderly hat wears_red flies magic ~human
+Indiana Jones | 65 | Archaeologist adventurer with a whip | from_film male human hat american gun
+Rocky Balboa | 60 | Underdog boxer from Philadelphia | from_film male human fighter athlete american strong
+Forrest Gump | 55 | Kind man who runs across America | from_film from_book male human american ~athlete military speed
+Krrish | 50 | Indian superhero from the Krrish films | from_film bollywood male human superhero superpowers indian mask ~flies
+Shaktimaan | 55 | India's first TV superhero | from_tv male human superhero superpowers indian flies
