@@ -51,7 +51,7 @@ def text_row(qid: int, e: dict, full: bool) -> dict:
 
 def handle(line: bytes, w: PartWriter, args: tuple) -> int:
     human_min, typed_min = args
-    if has_empty_sitelinks(line) and b'"P279"' not in line:
+    if has_empty_sitelinks(line) and b'"P279"' not in line and b'"_keep":1' not in line:
         return 0
     pid = peek_id(line)
     if pid is None or pid[0] != "Q":
@@ -67,7 +67,8 @@ def handle(line: bytes, w: PartWriter, args: tuple) -> int:
         w.add("class_labels", {"qid": qid, "en": english_label(e)})
         kept = 1
 
-    n_sites = len(wikipedia_sitelinks(e))
+    # Dumps built by apidump.py carry the full count; their sitelinks hold only 7 languages.
+    n_sites = e.get("_sitelink_count", len(wikipedia_sitelinks(e)))
     p31 = item_ids(e, "P31")
     if C.Q_HUMAN in p31:
         if n_sites >= human_min:

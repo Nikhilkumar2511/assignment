@@ -97,8 +97,13 @@ def wikipedia_sitelinks(entity: dict) -> dict[str, str]:
 
 
 def labels(entity: dict) -> dict[str, str]:
+    """Labels in the game's languages. Since 2024 many names live only under "mul"
+    (one label for all languages); it fills in for English when English is missing."""
     lab = entity.get("labels", {})
-    return {lang: lab[lang]["value"] for lang in LANGS if lang in lab}
+    out = {lang: lab[lang]["value"] for lang in LANGS if lang in lab}
+    if "en" not in out and "mul" in lab:
+        out["en"] = lab["mul"]["value"]
+    return out
 
 
 def descriptions(entity: dict) -> dict[str, str]:
@@ -108,7 +113,11 @@ def descriptions(entity: dict) -> dict[str, str]:
 
 def aliases(entity: dict) -> dict[str, list[str]]:
     ali = entity.get("aliases", {})
-    return {lang: [a["value"] for a in ali[lang][:MAX_ALIASES_PER_LANG]] for lang in LANGS if lang in ali}
+    out = {lang: [a["value"] for a in ali[lang][:MAX_ALIASES_PER_LANG]] for lang in LANGS if lang in ali}
+    if "mul" in ali:
+        out.setdefault("en", [])
+        out["en"].extend(a["value"] for a in ali["mul"][:MAX_ALIASES_PER_LANG] if a["value"] not in out["en"])
+    return out
 
 
 def english_label(entity: dict) -> str | None:

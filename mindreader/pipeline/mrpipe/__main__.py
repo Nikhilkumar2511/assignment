@@ -93,6 +93,7 @@ def main(argv: list[str] | None = None) -> None:
             p.add_argument("--dsn", default=os.environ.get("DATABASE_URL"), required=not os.environ.get("DATABASE_URL"))
 
     p = sub.add_parser("schema"); p.add_argument("--dsn", default=os.environ.get("DATABASE_URL"))
+    p = sub.add_parser("apidump"); common(p); p.add_argument("--out", required=True)
     p = sub.add_parser("sample"); p.add_argument("--dump", required=True); p.add_argument("--out", required=True)
     p.add_argument("--every", type=int, default=100)
     for stage in ("pass1", "pass2"):
@@ -121,6 +122,9 @@ def main(argv: list[str] | None = None) -> None:
         return cmd_schema(a)
     if a.cmd == "sample":
         return cmd_sample(a)
+    if a.cmd == "apidump":
+        from . import apidump
+        return _print("apidump", apidump.run(C.Paths(a.work).ensure(), a.out))
     paths = C.Paths(a.work).ensure()
     if a.cmd in ("pass1", "select", "pass2", "pageviews", "build", "load"):
         run_stage(a.cmd, a, paths)

@@ -1,0 +1,14 @@
+{
+  "name": "mindreader-game",
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "test": "npm run test -w @mindreader/engine && npm run test -w @mindreader/server",
+    "build": "npm run build -w @mindreader/web && npm run build -w @mindreader/server",
+    "start": "npm run start -w @mindreader/server",
+    "dev:server": "npm run dev -w @mindreader/server",
+    "dev:web": "npm run dev -w @mindreader/web",
+    "seed": "python3 scripts/build_seed_snapshot.py data/seed"
+  },
+  "engines": { "node": ">=20" }
+}

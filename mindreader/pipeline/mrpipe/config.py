@@ -27,10 +27,12 @@ NON_WIKIPEDIA_SITES = {
 Q_HUMAN = 5
 # Roots whose subclass trees count as "fictional character". Q95074 fictional character,
 # Q178885 deity, Q2239243 mythical creature. Classes whose English label matches
-# FICTIONAL_ROOT_LABEL_PATTERNS are added as roots too, because the Q-numbers for
-# "mythical character" and "legendary figure" could not be verified; the run report
-# lists every class picked up this way.
-FICTIONAL_ROOT_QIDS = [95074, 178885, 2239243]
+# FICTIONAL_ROOT_LABEL_PATTERNS are added as roots too; the run report lists them.
+FICTIONAL_ROOT_QIDS = [95074, 178885, 2239243, 4271324, 13002315, 3966183]
+# Q4271324 mythical character, Q13002315 legendary figure and Q3966183 Pokemon species were
+# confirmed on QLever (Pokemon species adds about 1,200 characters the other roots miss).
+# Classes whose instances are not characters players would think of.
+FICTIONAL_EXCLUDE_CLASSES = [340069]   # processional giant (festival figures)
 FICTIONAL_ROOT_LABEL_PATTERNS = [
     r"^(mythological|mythical|legendary|folklore) (character|figure|hero|heroine|being|creature)$",
     r"^(hindu|greek|roman|norse|egyptian|japanese|chinese) (deity|god|goddess|mythological figure)$",
