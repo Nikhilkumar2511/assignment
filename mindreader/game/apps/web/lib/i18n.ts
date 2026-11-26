@@ -1,0 +1,200 @@
+// Interface text in the 7 game languages. Question text comes from the snapshot.
+
+export type Lang = "en" | "hi" | "es" | "pt" | "ja" | "fr" | "ar";
+export const LANGS: { code: Lang; name: string }[] = [
+  { code: "en", name: "English" },
+  { code: "hi", name: "हिन्दी" },
+  { code: "es", name: "Español" },
+  { code: "pt", name: "Português" },
+  { code: "ja", name: "日本語" },
+  { code: "fr", name: "Français" },
+  { code: "ar", name: "العربية" },
+];
+export const RTL: Lang[] = ["ar"];
+
+const en = {
+  tagline: "Think of a famous person or character. I will read your mind.",
+  start: "Start",
+  characters: (n: string) => `${n} characters`,
+  question: (n: number) => `Question ${n}`,
+  yes: "Yes",
+  no: "No",
+  dontKnow: "Don't know",
+  probably: "Probably",
+  probablyNot: "Probably not",
+  undo: "Undo",
+  restart: "Start over",
+  sure: "How sure I am",
+  thinking: "Thinking...",
+  iThink: "I think it is...",
+  isItRight: "Am I right?",
+  right: "Yes, that's it!",
+  wrong: "No",
+  guessOf: (a: number, b: number) => `Guess ${a} of ${b}`,
+  gotIt: "Got it!",
+  guessedIn: (name: string, n: number) => `I guessed ${name} in ${n} questions.`,
+  shareText: (name: string, n: number) => `MindReader guessed ${name} in ${n} questions. Can you beat it?`,
+  share: "Share",
+  shared: "Copied to clipboard",
+  playAgain: "Play again",
+  youWin: "You beat me!",
+  whoWasIt: "Who were you thinking of? It helps me learn.",
+  searchPlaceholder: "Type a name",
+  notInList: (name: string) => `Add "${name}" as a new character`,
+  description: "Short description (optional)",
+  teach: "Teach me",
+  skip: "Skip",
+  thanksKnown: (name: string) => `Thanks! I will remember that about ${name}.`,
+  thanksNew: "Thanks! A moderator will review the new character.",
+  thanksPlain: "Thanks for playing!",
+  offline: "Offline mode: playing with the built-in 247 characters.",
+  error: "Something went wrong. Please try again.",
+  install: "Install app",
+  about: "About",
+  takedown: "Report an image",
+  language: "Language",
+  contrast: "High contrast",
+  motion: "Animations",
+  photo: "Photo",
+  keyboard: "Keys: 1 Yes, 2 No, 3 Don't know, 4 Probably, 5 Probably not, U undo",
+};
+export type Strings = typeof en;
+
+const hi: Strings = {
+  ...en,
+  tagline: "किसी मशहूर व्यक्ति या किरदार के बारे में सोचिए। मैं आपका मन पढ़ लूँगा।",
+  start: "शुरू करें",
+  characters: (n) => `${n} किरदार`,
+  question: (n) => `सवाल ${n}`,
+  yes: "हाँ", no: "नहीं", dontKnow: "पता नहीं", probably: "शायद हाँ", probablyNot: "शायद नहीं",
+  undo: "वापस लें", restart: "फिर से शुरू", sure: "मैं कितना पक्का हूँ", thinking: "सोच रहा हूँ...",
+  iThink: "मुझे लगता है यह है...", isItRight: "क्या मैं सही हूँ?", right: "हाँ, यही है!", wrong: "नहीं",
+  guessOf: (a, b) => `अनुमान ${a} / ${b}`, gotIt: "पकड़ लिया!",
+  guessedIn: (name, n) => `मैंने ${n} सवालों में ${name} पहचान लिया।`,
+  shareText: (name, n) => `MindReader ने ${n} सवालों में ${name} पहचान लिया। क्या आप इसे हरा सकते हैं?`,
+  share: "शेयर करें", shared: "कॉपी हो गया", playAgain: "फिर खेलें", youWin: "आप जीत गए!",
+  whoWasIt: "आप किसके बारे में सोच रहे थे? इससे मैं सीखता हूँ।", searchPlaceholder: "नाम लिखें",
+  notInList: (name) => `"${name}" को नए किरदार के रूप में जोड़ें`, description: "छोटा परिचय (वैकल्पिक)",
+  teach: "सिखाएँ", skip: "छोड़ें", thanksKnown: (name) => `धन्यवाद! मैं ${name} के बारे में यह याद रखूँगा।`,
+  thanksNew: "धन्यवाद! एक मॉडरेटर नए किरदार की जाँच करेगा।", thanksPlain: "खेलने के लिए धन्यवाद!",
+  offline: "ऑफ़लाइन मोड: 247 किरदारों के साथ खेल रहे हैं।", error: "कुछ गड़बड़ हुई। फिर से कोशिश करें।",
+  install: "ऐप इंस्टॉल करें", about: "जानकारी", takedown: "तस्वीर की शिकायत", language: "भाषा",
+  contrast: "हाई कॉन्ट्रास्ट", motion: "एनिमेशन", photo: "फ़ोटो",
+  keyboard: "कुंजियाँ: 1 हाँ, 2 नहीं, 3 पता नहीं, 4 शायद हाँ, 5 शायद नहीं, U वापस",
+};
+
+const es: Strings = {
+  ...en,
+  tagline: "Piensa en una persona o personaje famoso. Leeré tu mente.",
+  start: "Empezar", characters: (n) => `${n} personajes`, question: (n) => `Pregunta ${n}`,
+  yes: "Sí", no: "No", dontKnow: "No sé", probably: "Probablemente", probablyNot: "Probablemente no",
+  undo: "Deshacer", restart: "Reiniciar", sure: "Mi seguridad", thinking: "Pensando...",
+  iThink: "Creo que es...", isItRight: "¿Acerté?", right: "¡Sí, es ese!", wrong: "No",
+  guessOf: (a, b) => `Intento ${a} de ${b}`, gotIt: "¡Lo tengo!",
+  guessedIn: (name, n) => `Adiviné a ${name} en ${n} preguntas.`,
+  shareText: (name, n) => `MindReader adivinó a ${name} en ${n} preguntas. ¿Puedes ganarle?`,
+  share: "Compartir", shared: "Copiado", playAgain: "Jugar otra vez", youWin: "¡Me ganaste!",
+  whoWasIt: "¿En quién pensabas? Así aprendo.", searchPlaceholder: "Escribe un nombre",
+  notInList: (name) => `Añadir "${name}" como personaje nuevo`, description: "Descripción corta (opcional)",
+  teach: "Enséñame", skip: "Omitir", thanksKnown: (name) => `¡Gracias! Recordaré esto sobre ${name}.`,
+  thanksNew: "¡Gracias! Un moderador revisará el personaje.", thanksPlain: "¡Gracias por jugar!",
+  offline: "Sin conexión: jugando con 247 personajes incluidos.", error: "Algo salió mal. Inténtalo de nuevo.",
+  install: "Instalar app", about: "Acerca de", takedown: "Reportar una imagen", language: "Idioma",
+  contrast: "Alto contraste", motion: "Animaciones", photo: "Foto",
+  keyboard: "Teclas: 1 Sí, 2 No, 3 No sé, 4 Probablemente, 5 Probablemente no, U deshacer",
+};
+
+const pt: Strings = {
+  ...en,
+  tagline: "Pense em uma pessoa ou personagem famoso. Eu vou ler sua mente.",
+  start: "Começar", characters: (n) => `${n} personagens`, question: (n) => `Pergunta ${n}`,
+  yes: "Sim", no: "Não", dontKnow: "Não sei", probably: "Provavelmente", probablyNot: "Provavelmente não",
+  undo: "Desfazer", restart: "Recomeçar", sure: "Minha certeza", thinking: "Pensando...",
+  iThink: "Acho que é...", isItRight: "Acertei?", right: "Sim, é esse!", wrong: "Não",
+  guessOf: (a, b) => `Palpite ${a} de ${b}`, gotIt: "Acertei!",
+  guessedIn: (name, n) => `Adivinhei ${name} em ${n} perguntas.`,
+  shareText: (name, n) => `O MindReader adivinhou ${name} em ${n} perguntas. Consegue vencer?`,
+  share: "Compartilhar", shared: "Copiado", playAgain: "Jogar de novo", youWin: "Você me venceu!",
+  whoWasIt: "Em quem você estava pensando? Assim eu aprendo.", searchPlaceholder: "Digite um nome",
+  notInList: (name) => `Adicionar "${name}" como novo personagem`, description: "Descrição curta (opcional)",
+  teach: "Me ensine", skip: "Pular", thanksKnown: (name) => `Obrigado! Vou lembrar disso sobre ${name}.`,
+  thanksNew: "Obrigado! Um moderador vai revisar o personagem.", thanksPlain: "Obrigado por jogar!",
+  offline: "Modo offline: jogando com 247 personagens incluídos.", error: "Algo deu errado. Tente de novo.",
+  install: "Instalar app", about: "Sobre", takedown: "Denunciar imagem", language: "Idioma",
+  contrast: "Alto contraste", motion: "Animações", photo: "Foto",
+  keyboard: "Teclas: 1 Sim, 2 Não, 3 Não sei, 4 Provavelmente, 5 Provavelmente não, U desfazer",
+};
+
+const ja: Strings = {
+  ...en,
+  tagline: "有名な人物やキャラクターを思い浮かべてください。あなたの心を読みます。",
+  start: "スタート", characters: (n) => `${n}人のキャラクター`, question: (n) => `質問 ${n}`,
+  yes: "はい", no: "いいえ", dontKnow: "わからない", probably: "たぶんそう", probablyNot: "たぶん違う",
+  undo: "戻る", restart: "最初から", sure: "自信", thinking: "考え中...",
+  iThink: "あなたが思い浮かべているのは...", isItRight: "合っていますか？", right: "はい、正解！", wrong: "いいえ",
+  guessOf: (a, b) => `${b}回中${a}回目の予想`, gotIt: "当たり！",
+  guessedIn: (name, n) => `${n}問で${name}を当てました。`,
+  shareText: (name, n) => `MindReaderが${n}問で${name}を当てました。勝てるかな？`,
+  share: "シェア", shared: "コピーしました", playAgain: "もう一度遊ぶ", youWin: "あなたの勝ち！",
+  whoWasIt: "誰を思い浮かべていましたか？学習に役立ちます。", searchPlaceholder: "名前を入力",
+  notInList: (name) => `「${name}」を新しいキャラクターとして追加`, description: "短い説明（任意）",
+  teach: "教える", skip: "スキップ", thanksKnown: (name) => `ありがとう！${name}について覚えておきます。`,
+  thanksNew: "ありがとう！モデレーターが確認します。", thanksPlain: "遊んでくれてありがとう！",
+  offline: "オフライン: 内蔵の247キャラクターで遊んでいます。", error: "エラーが発生しました。もう一度お試しください。",
+  install: "アプリをインストール", about: "このゲームについて", takedown: "画像を報告", language: "言語",
+  contrast: "ハイコントラスト", motion: "アニメーション", photo: "写真",
+  keyboard: "キー: 1 はい、2 いいえ、3 わからない、4 たぶんそう、5 たぶん違う、U 戻る",
+};
+
+const fr: Strings = {
+  ...en,
+  tagline: "Pensez à une personne ou un personnage célèbre. Je vais lire dans vos pensées.",
+  start: "Commencer", characters: (n) => `${n} personnages`, question: (n) => `Question ${n}`,
+  yes: "Oui", no: "Non", dontKnow: "Je ne sais pas", probably: "Probablement", probablyNot: "Probablement pas",
+  undo: "Annuler", restart: "Recommencer", sure: "Ma certitude", thinking: "Je réfléchis...",
+  iThink: "Je pense que c'est...", isItRight: "Ai-je raison ?", right: "Oui, c'est ça !", wrong: "Non",
+  guessOf: (a, b) => `Essai ${a} sur ${b}`, gotIt: "Trouvé !",
+  guessedIn: (name, n) => `J'ai deviné ${name} en ${n} questions.`,
+  shareText: (name, n) => `MindReader a deviné ${name} en ${n} questions. Saurez-vous le battre ?`,
+  share: "Partager", shared: "Copié", playAgain: "Rejouer", youWin: "Vous m'avez battu !",
+  whoWasIt: "À qui pensiez-vous ? Cela m'aide à apprendre.", searchPlaceholder: "Tapez un nom",
+  notInList: (name) => `Ajouter « ${name} » comme nouveau personnage`, description: "Courte description (facultatif)",
+  teach: "M'apprendre", skip: "Passer", thanksKnown: (name) => `Merci ! Je m'en souviendrai pour ${name}.`,
+  thanksNew: "Merci ! Un modérateur vérifiera ce personnage.", thanksPlain: "Merci d'avoir joué !",
+  offline: "Hors ligne : partie avec les 247 personnages intégrés.", error: "Une erreur est survenue. Réessayez.",
+  install: "Installer l'app", about: "À propos", takedown: "Signaler une image", language: "Langue",
+  contrast: "Contraste élevé", motion: "Animations", photo: "Photo",
+  keyboard: "Touches : 1 Oui, 2 Non, 3 Je ne sais pas, 4 Probablement, 5 Probablement pas, U annuler",
+};
+
+const ar: Strings = {
+  ...en,
+  tagline: "فكّر في شخص أو شخصية مشهورة. سأقرأ أفكارك.",
+  start: "ابدأ", characters: (n) => `${n} شخصية`, question: (n) => `السؤال ${n}`,
+  yes: "نعم", no: "لا", dontKnow: "لا أعرف", probably: "على الأرجح", probablyNot: "على الأرجح لا",
+  undo: "تراجع", restart: "ابدأ من جديد", sure: "مدى ثقتي", thinking: "أفكّر...",
+  iThink: "أعتقد أنه...", isItRight: "هل أصبت؟", right: "نعم، هذا هو!", wrong: "لا",
+  guessOf: (a, b) => `التخمين ${a} من ${b}`, gotIt: "عرفته!",
+  guessedIn: (name, n) => `خمّنتُ ${name} في ${n} سؤالًا.`,
+  shareText: (name, n) => `خمّن MindReader ${name} في ${n} سؤالًا. هل يمكنك هزيمته؟`,
+  share: "مشاركة", shared: "تم النسخ", playAgain: "العب مجددًا", youWin: "لقد هزمتني!",
+  whoWasIt: "بمن كنت تفكر؟ هذا يساعدني على التعلّم.", searchPlaceholder: "اكتب اسمًا",
+  notInList: (name) => `أضف "${name}" كشخصية جديدة`, description: "وصف قصير (اختياري)",
+  teach: "علّمني", skip: "تخطَّ", thanksKnown: (name) => `شكرًا! سأتذكر هذا عن ${name}.`,
+  thanksNew: "شكرًا! سيراجع مشرف الشخصية الجديدة.", thanksPlain: "شكرًا على اللعب!",
+  offline: "وضع عدم الاتصال: اللعب بـ 247 شخصية مدمجة.", error: "حدث خطأ. حاول مرة أخرى.",
+  install: "ثبّت التطبيق", about: "حول", takedown: "الإبلاغ عن صورة", language: "اللغة",
+  contrast: "تباين عالٍ", motion: "الرسوم المتحركة", photo: "صورة",
+  keyboard: "المفاتيح: 1 نعم، 2 لا، 3 لا أعرف، 4 على الأرجح، 5 على الأرجح لا، U تراجع",
+};
+
+export const STRINGS: Record<Lang, Strings> = { en, hi, es, pt, ja, fr, ar };
+
+export function detectLang(): Lang {
+  if (typeof navigator === "undefined") return "en";
+  for (const l of navigator.languages ?? [navigator.language]) {
+    const code = l.slice(0, 2).toLowerCase() as Lang;
+    if (code in STRINGS) return code;
+  }
+  return "en";
+}

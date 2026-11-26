@@ -1,0 +1,23 @@
+{
+  "name": "@mindreader/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prebuild": "node scripts/copy-offline.mjs",
+    "build": "next build && node scripts/gen-sw.mjs",
+    "dev": "node scripts/copy-offline.mjs && next dev -p 3000",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mindreader/engine": "1.0.0",
+    "next": "15.5.6",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "5.9.3"
+  }
+}

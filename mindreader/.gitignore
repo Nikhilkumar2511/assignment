@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.db
+*.db-wal
+*.db-shm
+.pytest_cache/
+node_modules/
+work/
+.next/
+out/
+dist/
+*.tsbuildinfo
+game/apps/web/public/offline/
+game/data/learning.jsonl
