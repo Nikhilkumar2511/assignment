@@ -28,8 +28,8 @@ Walt Disney | 65 | Founder of the Disney company | real male business director a
 Magnus Carlsen | 55 | Norwegian chess world champion | real male european genius
 
 # ---------- Real people: music ----------
-Taylor Swift | 95 | American pop and country singer-songwriter | real female musician american blonde ~writer billionaire
-Beyonce | 85 | American singer, formerly of Destiny's Child | real female musician american band dancer ~actor billionaire
+Taylor Swift | 95 | American pop and country singer-songwriter | real female musician american blonde ~writer billionaire ~famous_spouse
+Beyonce | 85 | American singer, formerly of Destiny's Child | real female musician american band dancer ~actor billionaire famous_spouse
 Rihanna | 85 | Barbadian singer and founder of Fenty Beauty | real female musician business billionaire latin_american ~actor
 Michael Jackson | 95 | The King of Pop | real male musician dancer american dead band hat
 Elvis Presley | 80 | The King of Rock and Roll | real male musician actor american dead dancer
@@ -41,19 +41,19 @@ Justin Bieber | 85 | Canadian pop singer discovered on YouTube | real male music
 Ed Sheeran | 75 | British singer-songwriter | real male musician british red_hair ~beard
 Lady Gaga | 80 | American singer and actress | real female musician actor american blonde
 Billie Eilish | 75 | American singer-songwriter | real female musician american born_after_1990
-Shakira | 75 | Colombian singer famous for her dancing | real female musician latin_american dancer ~blonde
+Shakira | 75 | Colombian singer famous for her dancing | real female musician latin_american dancer ~blonde ~famous_spouse
 Ariana Grande | 75 | American singer and actress | real female musician actor american born_after_1990
 Selena Gomez | 60 | American singer and actress | real female musician actor american born_after_1990 business
 Jungkook | 65 | Singer in the K-pop group BTS | real male musician band dancer asian_other born_after_1990
-A. R. Rahman | 65 | Oscar-winning Indian composer | real male musician indian bollywood
+A. R. Rahman | 65 | Oscar-winning Indian composer | real male musician indian bollywood ~south_cinema
 Lata Mangeshkar | 65 | Legendary Indian playback singer | real female musician indian bollywood dead elderly
 Arijit Singh | 70 | Indian playback singer | real male musician indian bollywood beard
 Mozart | 65 | Classical composer from Austria | real male composer musician european historical genius
 Beethoven | 60 | Classical composer who went deaf | real male composer musician european historical
 
 # ---------- Real people: sport ----------
-Cristiano Ronaldo | 98 | Portuguese footballer | real male football european billionaire ~youtuber strong
-Lionel Messi | 98 | Argentine footballer | real male football latin_american beard ~billionaire
+Cristiano Ronaldo | 98 | Portuguese footballer | real male football european billionaire ~youtuber strong captain
+Lionel Messi | 98 | Argentine footballer | real male football latin_american beard ~billionaire captain
 Neymar | 75 | Brazilian footballer | real male football latin_american
 Kylian Mbappe | 70 | French footballer | real male football european born_after_1990 speed
 Pele | 65 | Brazilian football legend | real male football latin_american dead elderly
@@ -66,24 +66,24 @@ Muhammad Ali | 80 | Boxing legend | real male fighter american dead olympic acti
 Mike Tyson | 75 | Heavyweight boxing champion | real male fighter american bald strong
 Conor McGregor | 55 | Irish UFC fighter | real male fighter european beard red_hair
 Lewis Hamilton | 70 | Formula One champion | real male racing british car speed
-Virat Kohli | 90 | Indian cricket star | real male cricket indian beard
-Sachin Tendulkar | 85 | Indian cricket legend | real male cricket indian
-MS Dhoni | 85 | Former Indian cricket captain | real male cricket indian ~military
-Rohit Sharma | 70 | Indian cricket captain | real male cricket indian beard
+Virat Kohli | 90 | Indian cricket star | real male cricket indian beard captain famous_spouse
+Sachin Tendulkar | 85 | Indian cricket legend | real male cricket indian captain
+MS Dhoni | 85 | Former Indian cricket captain | real male cricket indian ~military captain
+Rohit Sharma | 70 | Indian cricket captain | real male cricket indian beard captain
 Neeraj Chopra | 65 | Indian javelin Olympic champion | real male athlete indian olympic military born_after_1990
 
 # ---------- Real people: film and TV ----------
-Leonardo DiCaprio | 85 | Actor from Titanic and Inception | real male actor american blonde activist ~beard
-Tom Cruise | 85 | Actor from Mission: Impossible | real male actor american
-Brad Pitt | 75 | American actor | real male actor american blonde ~elderly
+Leonardo DiCaprio | 85 | Actor from Titanic and Inception | real male actor american blonde activist ~beard ~romance_star
+Tom Cruise | 85 | Actor from Mission: Impossible | real male actor american action_star
+Brad Pitt | 75 | American actor | real male actor american blonde ~elderly ~famous_spouse
 Johnny Depp | 75 | Actor who played Jack Sparrow | real male actor american hat ~musician ~beard
-Dwayne Johnson | 85 | Wrestler turned actor, known as The Rock | real male actor ~fighter american bald strong
+Dwayne Johnson | 85 | Wrestler turned actor, known as The Rock | real male actor ~fighter american bald strong action_star
 Will Smith | 75 | Actor and rapper | real male actor rapper american ~comedian
-Keanu Reeves | 75 | Actor from The Matrix and John Wick | real male actor beard ~american gun
+Keanu Reeves | 75 | Actor from The Matrix and John Wick | real male actor beard ~american gun action_star
 Scarlett Johansson | 70 | Actress who played Black Widow | real female actor american
-Angelina Jolie | 70 | Actress and humanitarian | real female actor american activist
-Jackie Chan | 80 | Martial arts film star from Hong Kong | real male actor fighter asian_other comedian elderly
-Bruce Lee | 75 | Martial arts legend and actor | real male actor fighter asian_other ~american dead
+Angelina Jolie | 70 | Actress and humanitarian | real female actor american activist ~famous_spouse
+Jackie Chan | 80 | Martial arts film star from Hong Kong | real male actor fighter asian_other comedian elderly action_star
+Bruce Lee | 75 | Martial arts legend and actor | real male actor fighter asian_other ~american dead action_star
 Charlie Chaplin | 70 | Silent film comedian | real male actor comedian director british dead hat
 Marilyn Monroe | 70 | 1950s film star | real female actor american blonde dead
 Morgan Freeman | 65 | Actor famous for his voice | real male actor american elderly
@@ -93,7 +93,7 @@ Zendaya | 70 | Actress and singer | real female actor musician american born_aft
 Emma Watson | 75 | Actress who played Hermione | real female actor british activist born_after_1990
 Daniel Radcliffe | 65 | Actor who played Harry Potter | real male actor british
 Rowan Atkinson | 65 | British comedian who plays Mr. Bean | real male actor comedian british elderly
-Kim Kardashian | 70 | Reality TV star and businesswoman | real female youtuber business billionaire american
+Kim Kardashian | 70 | Reality TV star and businesswoman | real female youtuber business billionaire american ~famous_spouse
 Oprah Winfrey | 65 | Talk show host | real female tv_host business billionaire american elderly
 MrBeast | 85 | YouTuber known for huge challenges | real male youtuber business american born_after_1990 beard ~billionaire
 PewDiePie | 65 | Swedish YouTuber | real male youtuber european born_after_1990 beard comedian
@@ -103,24 +103,24 @@ Christopher Nolan | 60 | Director of Inception and The Dark Knight | real male d
 Stan Lee | 60 | Co-creator of many Marvel heroes | real male writer american dead glasses elderly
 
 # ---------- Real people: Indian cinema ----------
-Shah Rukh Khan | 95 | Bollywood superstar known as King Khan | real male actor bollywood indian ~billionaire business
-Amitabh Bachchan | 90 | Bollywood legend and quiz show host | real male actor bollywood indian elderly beard tv_host
-Salman Khan | 85 | Bollywood action star | real male actor bollywood indian strong tv_host
-Akshay Kumar | 75 | Bollywood action and comedy actor | real male actor bollywood indian ~fighter ~comedian
-Hrithik Roshan | 70 | Bollywood actor and dancer | real male actor bollywood indian dancer
-Deepika Padukone | 75 | Bollywood actress | real female actor bollywood indian
-Priyanka Chopra | 75 | Actress and former Miss World | real female actor bollywood indian ~musician ~american
-Alia Bhatt | 70 | Bollywood actress | real female actor bollywood indian born_after_1990
-Rajinikanth | 80 | Tamil cinema superstar | real male actor indian elderly ~bollywood ~bald
-Allu Arjun | 70 | Telugu star of Pushpa | real male actor indian dancer ~bollywood beard
-Prabhas | 65 | Star of Baahubali | real male actor indian ~bollywood sword beard
+Shah Rukh Khan | 95 | Bollywood superstar known as King Khan | real male actor bollywood indian ~billionaire business ~action_star romance_star khan
+Amitabh Bachchan | 90 | Bollywood legend and quiz show host | real male actor bollywood indian elderly beard tv_host ~film_family ~action_star famous_spouse
+Salman Khan | 85 | Bollywood action star | real male actor bollywood indian strong tv_host ~film_family action_star khan
+Akshay Kumar | 75 | Bollywood action and comedy actor | real male actor bollywood indian ~fighter ~comedian action_star ~punjabi
+Hrithik Roshan | 70 | Bollywood actor and dancer | real male actor bollywood indian dancer film_family action_star
+Deepika Padukone | 75 | Bollywood actress | real female actor bollywood indian ~romance_star ~hollywood_too famous_spouse
+Priyanka Chopra | 75 | Actress and former Miss World | real female actor bollywood indian ~musician ~american ~punjabi beauty_queen hollywood_too famous_spouse
+Alia Bhatt | 70 | Bollywood actress | real female actor bollywood indian born_after_1990 film_family ~romance_star ~hollywood_too famous_spouse
+Rajinikanth | 80 | Tamil cinema superstar | real male actor indian elderly ~bollywood ~bald south_cinema action_star
+Allu Arjun | 70 | Telugu star of Pushpa | real male actor indian dancer ~bollywood beard south_cinema film_family action_star
+Prabhas | 65 | Star of Baahubali | real male actor indian ~bollywood sword beard south_cinema action_star
 
 # ---------- Real people: politics, history, culture ----------
 Narendra Modi | 90 | Prime Minister of India | real male politician head_of_state indian elderly beard
-Mahatma Gandhi | 90 | Leader of India's independence movement | real male activist politician indian dead bald glasses elderly
-Bhagat Singh | 70 | Indian revolutionary freedom fighter | real male activist indian dead hat ~military
+Mahatma Gandhi | 90 | Leader of India's independence movement | real male activist politician indian dead bald glasses elderly freedom_struggle
+Bhagat Singh | 70 | Indian revolutionary freedom fighter | real male activist indian dead hat ~military punjabi freedom_struggle
 Swami Vivekananda | 60 | Indian monk and philosopher | real male indian historical ~writer
-Rabindranath Tagore | 60 | Nobel-winning Bengali poet | real male writer indian dead beard nobel elderly
+Rabindranath Tagore | 60 | Nobel-winning Bengali poet | real male writer indian dead beard nobel elderly ~freedom_struggle
 Mother Teresa | 60 | Catholic nun who helped the poor in Kolkata | real female activist european ~indian dead elderly nobel
 Barack Obama | 90 | 44th President of the United States | real male politician head_of_state american nobel ~writer
 Donald Trump | 90 | US President and businessman | real male politician head_of_state business billionaire american blonde elderly tv_host
@@ -129,9 +129,9 @@ George Washington | 60 | First President of the United States | real male politi
 Winston Churchill | 65 | British Prime Minister during World War II | real male politician head_of_state british dead elderly bald military hat writer nobel
 Nelson Mandela | 70 | Anti-apartheid leader and President of South Africa | real male politician head_of_state activist african dead elderly nobel
 Vladimir Putin | 75 | President of Russia | real male politician head_of_state ~european elderly ~bald ~military
-Queen Elizabeth II | 80 | Longest-reigning British monarch | real female royalty british dead elderly hat
-King Charles III | 60 | King of the United Kingdom | real male royalty british elderly
-Princess Diana | 65 | Princess of Wales | real female royalty british dead blonde activist
+Queen Elizabeth II | 80 | Longest-reigning British monarch | real female royalty british dead elderly hat famous_spouse
+King Charles III | 60 | King of the United Kingdom | real male royalty british elderly famous_spouse
+Princess Diana | 65 | Princess of Wales | real female royalty british dead blonde activist famous_spouse
 Napoleon Bonaparte | 70 | French emperor and military leader | real male military head_of_state politician european historical hat ~royalty
 Julius Caesar | 60 | Roman general and dictator | real male military politician head_of_state european historical
 Cleopatra | 65 | Last pharaoh of ancient Egypt | real female royalty african historical head_of_state
@@ -280,3 +280,125 @@ Rocky Balboa | 60 | Underdog boxer from Philadelphia | from_film male human figh
 Forrest Gump | 55 | Kind man who runs across America | from_film from_book male human american ~athlete military speed
 Krrish | 50 | Indian superhero from the Krrish films | from_film bollywood male human superhero superpowers indian mask ~flies
 Shaktimaan | 55 | India's first TV superhero | from_tv male human superhero superpowers indian flies
+
+# ---------- More India: film ----------
+Aamir Khan | 85 | Bollywood actor known for Lagaan, 3 Idiots and Dangal | real male actor bollywood indian elderly ~film_family khan
+Ranbir Kapoor | 75 | Bollywood actor from the Kapoor film family | real male actor bollywood indian beard film_family romance_star ~punjabi famous_spouse
+Ranveer Singh | 75 | Energetic Bollywood actor of Padmaavat and Gully Boy | real male actor bollywood indian beard dancer ~action_star famous_spouse
+Ajay Devgn | 70 | Bollywood action star of the Singham films | real male actor bollywood indian beard action_star famous_spouse
+Sanjay Dutt | 65 | Bollywood actor known as Munna Bhai | real male actor bollywood indian elderly ~beard film_family action_star
+Sunny Deol | 60 | Bollywood action actor of Gadar and Border | real male actor bollywood indian elderly strong film_family action_star punjabi
+Shahid Kapoor | 60 | Bollywood actor and dancer | real male actor bollywood indian dancer ~beard film_family romance_star
+Varun Dhawan | 60 | Bollywood actor in comedies and dance films | real male actor bollywood indian dancer film_family ~romance_star
+Vicky Kaushal | 60 | Bollywood actor of Uri and Sardar Udham | real male actor bollywood indian beard military ~action_star famous_spouse
+Kartik Aaryan | 60 | Bollywood actor of romantic comedies | real male actor bollywood indian born_after_1990 comedian romance_star
+Tiger Shroff | 55 | Bollywood action star known for stunts and dance | real male actor bollywood indian born_after_1990 fighter dancer strong film_family action_star
+Nawazuddin Siddiqui | 55 | Acclaimed actor of Gangs of Wasseypur and Sacred Games | real male actor bollywood indian
+Pankaj Tripathi | 55 | Actor known for Mirzapur and Stree | real male actor bollywood indian ~beard
+Irrfan Khan | 60 | Actor of The Lunchbox and Life of Pi | real male actor bollywood indian dead khan hollywood_too
+Aishwarya Rai Bachchan | 80 | Actress and former Miss World | real female actor bollywood indian ~romance_star beauty_queen ~hollywood_too famous_spouse
+Madhuri Dixit | 70 | Bollywood actress and dancer of the 1990s | real female actor bollywood indian dancer romance_star
+Kajol | 65 | Bollywood actress of Dilwale Dulhania Le Jayenge | real female actor bollywood indian film_family romance_star famous_spouse
+Kareena Kapoor | 70 | Bollywood actress from the Kapoor film family | real female actor bollywood indian film_family romance_star ~punjabi famous_spouse
+Katrina Kaif | 70 | Bollywood actress | real female actor bollywood indian dancer famous_spouse
+Anushka Sharma | 65 | Bollywood actress married to Virat Kohli | real female actor bollywood indian famous_spouse
+Shraddha Kapoor | 60 | Bollywood actress and singer | real female actor bollywood indian ~musician film_family
+Kiara Advani | 55 | Bollywood actress | real female actor bollywood indian born_after_1990
+Rekha | 60 | Classic Bollywood actress | real female actor bollywood indian elderly ~romance_star
+Sridevi | 65 | First female superstar of Indian cinema | real female actor bollywood indian dead
+Dilip Kumar | 55 | Legendary actor of Hindi cinema | real male actor bollywood indian dead elderly
+Raj Kapoor | 55 | Actor and director known as the showman of Hindi cinema | real male actor director bollywood indian dead hat film_family ~punjabi
+Dev Anand | 50 | Evergreen star of classic Hindi films | real male actor bollywood indian dead romance_star
+Kamal Haasan | 70 | Tamil cinema star and politician | real male actor indian elderly ~bollywood ~politician south_cinema
+Vijay | 70 | Tamil cinema star known as Thalapathy | real male actor indian dancer ~politician south_cinema action_star
+Mahesh Babu | 65 | Telugu cinema star | real male actor indian south_cinema film_family action_star ~famous_spouse
+Jr NTR | 65 | Telugu star of RRR | real male actor indian dancer beard south_cinema film_family action_star
+Ram Charan | 60 | Telugu star of RRR | real male actor indian beard south_cinema film_family action_star ~famous_spouse
+Yash | 60 | Kannada star of the KGF films | real male actor indian beard strong south_cinema action_star
+Mohanlal | 60 | Malayalam cinema star | real male actor indian elderly beard south_cinema
+Mammootty | 55 | Malayalam cinema star | real male actor indian elderly south_cinema
+Dhanush | 55 | Tamil actor and singer of Why This Kolaveri Di | real male actor musician indian south_cinema film_family ~hollywood_too
+Rashmika Mandanna | 60 | Actress of Pushpa and Animal | real female actor indian born_after_1990 ~bollywood south_cinema
+Samantha Ruth Prabhu | 55 | Telugu and Tamil film actress | real female actor indian south_cinema ~famous_spouse
+Kapil Sharma | 65 | Comedian and host of The Kapil Sharma Show | real male comedian tv_host indian ~actor punjabi
+Johnny Lever | 50 | Bollywood comedian | real male actor comedian bollywood indian elderly
+
+# ---------- More India: music ----------
+Asha Bhosle | 60 | Legendary Indian playback singer | real female musician indian bollywood elderly
+Kishore Kumar | 60 | Legendary singer and actor of Hindi films | real male musician actor bollywood indian dead comedian
+Mohammed Rafi | 55 | Legendary playback singer of Hindi films | real male musician bollywood indian dead
+Shreya Ghoshal | 60 | Indian playback singer | real female musician indian bollywood
+Sonu Nigam | 55 | Indian playback singer | real male musician indian bollywood
+Diljit Dosanjh | 65 | Punjabi singer and actor | real male musician actor indian beard hat punjabi
+Badshah | 55 | Indian rapper | real male rapper indian beard glasses ~punjabi
+Yo Yo Honey Singh | 55 | Indian rapper and music producer | real male rapper indian beard punjabi
+Neha Kakkar | 50 | Indian pop singer | real female musician indian bollywood
+Sidhu Moose Wala | 55 | Punjabi singer and rapper | real male rapper musician indian dead beard punjabi
+AP Dhillon | 50 | Punjabi singer | real male musician indian born_after_1990 punjabi
+Zakir Hussain | 50 | Tabla maestro | real male musician indian dead elderly
+Ravi Shankar | 50 | Sitar maestro | real male musician composer indian dead elderly
+
+# ---------- More India: sport ----------
+Kapil Dev | 65 | Captain of India's 1983 World Cup winning team | real male cricket indian elderly captain ~bowler
+Sourav Ganguly | 65 | Former Indian cricket captain known as Dada | real male cricket indian captain
+Rahul Dravid | 65 | Indian cricketer known as The Wall | real male cricket indian captain
+Yuvraj Singh | 60 | Indian cricketer who hit six sixes in an over | real male cricket indian ~beard punjabi
+Jasprit Bumrah | 65 | Indian fast bowler | real male cricket indian born_after_1990 ~beard bowler
+Hardik Pandya | 60 | Indian all-rounder | real male cricket indian born_after_1990 ~beard ~captain ~bowler
+Shubman Gill | 55 | Indian cricket batter | real male cricket indian born_after_1990 punjabi ~captain
+Rishabh Pant | 55 | Indian wicketkeeper batter | real male cricket indian born_after_1990
+Smriti Mandhana | 50 | Indian women's cricket star | real female cricket indian born_after_1990
+Mithali Raj | 50 | Former captain of the Indian women's cricket team | real female cricket indian captain
+PV Sindhu | 55 | Badminton world champion and Olympic medallist | real female athlete indian olympic born_after_1990
+Saina Nehwal | 50 | Badminton star and Olympic medallist | real female athlete indian olympic born_after_1990
+Mary Kom | 55 | Six-time world champion boxer | real female fighter athlete indian olympic
+Sunil Chhetri | 50 | Captain of the Indian football team | real male football indian ~beard captain
+Milkha Singh | 55 | The Flying Sikh, sprinter | real male athlete indian dead speed beard military punjabi
+Dhyan Chand | 50 | Hockey legend | real male athlete indian dead olympic military
+Viswanathan Anand | 50 | Chess world champion | real male indian genius ~glasses
+Sania Mirza | 50 | Tennis star | real female tennis indian
+Abhinav Bindra | 45 | India's first individual Olympic gold medallist, shooter | real male athlete indian olympic gun
+
+# ---------- More India: leaders, history, science, business ----------
+Jawaharlal Nehru | 75 | First Prime Minister of India | real male politician head_of_state indian dead hat freedom_struggle
+Indira Gandhi | 70 | First female Prime Minister of India | real female politician head_of_state indian dead ~freedom_struggle
+Sardar Vallabhbhai Patel | 60 | Iron Man of India and first Deputy Prime Minister | real male politician indian dead bald elderly freedom_struggle
+Subhas Chandra Bose | 65 | Freedom fighter who led the Indian National Army | real male activist military indian dead glasses hat freedom_struggle
+B. R. Ambedkar | 65 | Architect of the Indian Constitution | real male politician activist writer indian dead glasses ~freedom_struggle
+Atal Bihari Vajpayee | 60 | Former Prime Minister of India and poet | real male politician head_of_state writer indian dead elderly
+Manmohan Singh | 55 | Former Prime Minister of India and economist | real male politician head_of_state indian dead elderly beard hat punjabi
+Rahul Gandhi | 60 | Indian politician | real male politician indian beard
+Sonia Gandhi | 50 | Indian politician | real female politician indian elderly ~european ~famous_spouse
+Amit Shah | 55 | Indian politician and Home Minister | real male politician indian elderly
+Yogi Adityanath | 55 | Chief Minister of Uttar Pradesh | real male politician indian bald
+Arvind Kejriwal | 50 | Former Chief Minister of Delhi | real male politician activist indian glasses
+Mamata Banerjee | 50 | Chief Minister of West Bengal | real female politician indian elderly
+Droupadi Murmu | 50 | President of India | real female politician head_of_state indian elderly
+Chhatrapati Shivaji | 65 | Founder of the Maratha empire | real male royalty military indian historical sword beard hat
+Rani Lakshmibai | 55 | Queen of Jhansi who fought in 1857 | real female royalty military indian historical sword ~freedom_struggle
+Ashoka | 50 | Mauryan emperor | real male royalty head_of_state indian historical
+Akbar | 50 | Mughal emperor | real male royalty head_of_state indian historical beard hat
+Birbal | 45 | Witty advisor in the court of Akbar | real male comedian genius indian historical
+C. V. Raman | 50 | Physicist and Nobel laureate | real male scientist indian dead nobel hat
+Srinivasa Ramanujan | 55 | Self-taught mathematical genius | real male scientist genius indian dead
+Homi J. Bhabha | 45 | Father of India's nuclear programme | real male scientist indian dead
+Satya Nadella | 55 | CEO of Microsoft | real male business tech indian ~american bald glasses
+Gautam Adani | 55 | Founder of the Adani Group | real male business billionaire indian elderly
+Azim Premji | 45 | Wipro chairman and philanthropist | real male business tech billionaire indian elderly
+N. R. Narayana Murthy | 45 | Co-founder of Infosys | real male business tech indian elderly glasses
+Sudha Murty | 50 | Author and philanthropist | real female writer business indian elderly
+Dhirubhai Ambani | 45 | Founder of Reliance Industries | real male business billionaire indian dead
+Bhuvan Bam | 55 | YouTuber and creator of BB Ki Vines | real male youtuber comedian actor indian born_after_1990 beard
+Dhruv Rathee | 50 | YouTuber known for explainer videos | real male youtuber indian born_after_1990
+Ashish Chanchlani | 45 | YouTuber and comedian | real male youtuber comedian indian born_after_1990
+Chetan Bhagat | 45 | Author of Five Point Someone and 2 States | real male writer indian
+Gulzar | 45 | Poet, lyricist and film director | real male writer director indian elderly glasses
+
+# ---------- More India: fictional ----------
+Baahubali | 65 | Warrior prince of the Baahubali films | from_film male human indian sword strong royalty ~bollywood south_cinema
+Pushpa Raj | 55 | Red-sandalwood smuggler from the Pushpa films | from_film male human indian beard strong ~villain ~bollywood south_cinema
+Munna Bhai | 50 | Lovable Mumbai gangster from Munna Bhai MBBS | from_film bollywood male human indian comedian sidekick
+Gabbar Singh | 55 | Dacoit villain of Sholay | from_film bollywood male human indian villain gun beard
+Mogambo | 45 | Villain of Mr. India | from_film bollywood male human indian villain bald
+Chacha Chaudhary | 50 | Comic-book genius whose brain works faster than a computer | from_comic male human indian genius elderly ~hat sidekick
+Tenali Rama | 45 | Witty poet in the court of Krishnadevaraya | real male writer comedian genius indian historical

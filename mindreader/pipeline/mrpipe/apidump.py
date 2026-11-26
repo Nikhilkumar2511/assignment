@@ -94,7 +94,7 @@ class QLever:
         if os.path.exists(path):
             return path
         body = urllib.parse.urlencode({"query": PREFIXES + query})
-        for attempt in range(8):
+        for attempt in range(12):
             wait = MIN_SPACING - (time.monotonic() - self._last)
             if wait > 0:
                 time.sleep(wait)
@@ -254,11 +254,24 @@ def claims_for(q: QLever, store: Store, ids: list[int], tag: str) -> set[int]:
         path = q.tsv(f"{tag}_claims", f"SELECT ?x ?p ?v WHERE {{ {values} VALUES ?p {{ {props} }} ?x ?p ?v . "
                                       f"FILTER(isIRI(?v)) }}")
     except QueryTooBig:
+        # The shared endpoint also runs out of memory when it is busy, even for small queries:
+        # wait and retry once before splitting.
+        time.sleep(90)
+        try:
+            path = q.tsv(f"{tag}_claims", f"SELECT ?x ?p ?v WHERE {{ {values} VALUES ?p {{ {props} }} ?x ?p ?v . "
+                                          f"FILTER(isIRI(?v)) }}")
+            return _read_claims(store, path)
+        except (QueryTooBig, RuntimeError):
+            pass
         if len(ids) <= 50:
             raise
         half = len(ids) // 2
         log(f"{tag}: too big for the endpoint, splitting {len(ids):,} ids")
         return claims_for(q, store, ids[:half], tag + "a") | claims_for(q, store, ids[half:], tag + "b")
+    return _read_claims(store, path)
+
+
+def _read_claims(store: Store, path: str) -> set[int]:
     refs: set[int] = set()
     for row in QLever.rows(path):
         if len(row) < 3:

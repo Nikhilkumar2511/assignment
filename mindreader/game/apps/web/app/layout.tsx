@@ -19,8 +19,7 @@ export const viewport: Viewport = {
 };
 
 // Applies saved language, contrast and motion before first paint, so nothing flashes.
-const boot = `try{var l=localStorage.getItem("mr.lang");if(l){document.documentElement.lang=l;if(l==="ar")document.documentElement.dir="rtl"}
-if(localStorage.getItem("mr.contrast")==="1")document.documentElement.dataset.contrast="high";
+const boot = `try{if(localStorage.getItem("mr.contrast")==="1")document.documentElement.dataset.contrast="high";
 if(localStorage.getItem("mr.motion")==="0")document.documentElement.dataset.motion="off"}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

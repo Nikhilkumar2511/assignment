@@ -12,12 +12,14 @@ export const ANSWER_VALUE: (number | null)[] = [1, 0.75, null, 0.25, 0];
 export const RULES = {
   noise: 0.12, // share of answers assumed to be mistakes: one wrong answer never eliminates anyone
   topK: 2000,
-  guessConfidence: 0.85,
-  firstForcedGuess: 20, // then every 10 questions
-  forcedGuessEvery: 10,
+  guessConfidence: 0.7, // tuned by simulation: about 2.5 fewer questions than 0.85 for a small accuracy cost
+  leadGuess: { minQuestions: 8, minP: 0.5, ratio: 4 }, // also guess when far ahead of the runner-up
+  firstForcedGuess: 16, // then at 28 and 40
+  forcedGuessEvery: 12,
   maxQuestions: 40,
   maxGuesses: 3,
-  minGapAfterWrongGuess: 3,
+  minGapAfterWrongGuess: 2,
+  sameTopicPenalty: [0.8, 0.5], // gain multiplier when the last one / last two questions had the same topic
   minUsefulGain: 0.002, // nats
   nearBest: 0.95, // pick randomly among questions within 5% of the best gain (variety)
   maxCandidatesQuestions: 4000,
@@ -316,9 +318,29 @@ export function questionGains(kb: KB, post: Float64Array, state: GameState): { q
   return { qi: cands, gain };
 }
 
+function topicOf(kb: KB, qi: number): string | null {
+  const q = kb.questions[qi];
+  return q.topic ?? (q.group !== null ? `g${q.group}` : null);
+}
+
 export function chooseQuestion(kb: KB, post: Float64Array, state: GameState): Choice {
   const { qi, gain } = questionGains(kb, post, state);
   if (qi.length === 0) return { questionIndex: null, gain: 0 };
+  // Variety: a third "Is your character from <country>?" in a row is boring even when it is
+  // slightly more informative, so recent topics are discounted.
+  const recent = state.answers.slice(-2).map(([qid]) => {
+    const i = kb.questionIndex.get(qid);
+    return i === undefined ? null : topicOf(kb, i);
+  });
+  const last = recent[recent.length - 1] ?? null;
+  const both = recent.length === 2 && recent[0] !== null && recent[0] === recent[1] ? recent[0] : null;
+  const raw = Float64Array.from(gain);
+  for (let c = 0; c < qi.length; c++) {
+    const t = topicOf(kb, qi[c]);
+    if (t === null) continue;
+    if (both !== null && t === both) gain[c] *= RULES.sameTopicPenalty[1];
+    else if (t === last) gain[c] *= RULES.sameTopicPenalty[0];
+  }
   let best = -Infinity;
   for (const g of gain) if (g > best) best = g;
   const near: number[] = [];
@@ -326,7 +348,7 @@ export function chooseQuestion(kb: KB, post: Float64Array, state: GameState): Ch
   near.sort((a, b) => gain[b] - gain[a]);
   const pool = near.slice(0, 3);
   const pick = pool[Math.floor(rng(stepSeed(state))() * pool.length)];
-  return { questionIndex: qi[pick], gain: gain[pick] };
+  return { questionIndex: qi[pick], gain: raw[pick] };
 }
 
 // ---------------------------------------------------------------- game rules
@@ -335,16 +357,18 @@ export function newGame(seed: number): GameState {
   return { v: 1, seed: seed >>> 0, answers: [], wrong: [], lastGuessAt: -1, status: "asking", current: null, guess: null };
 }
 
-function topOf(post: Float64Array): { index: number; p: number } {
+function topOf(post: Float64Array): { index: number; p: number; second: number } {
   let index = -1;
   let p = 0;
+  let second = 0;
   for (let i = 0; i < post.length; i++) {
     if (post[i] > p) {
+      second = p;
       p = post[i];
       index = i;
-    }
+    } else if (post[i] > second) second = post[i];
   }
-  return { index, p };
+  return { index, p, second };
 }
 
 /** Decide what happens next: ask, guess, or give up. Returns a new state. */
@@ -361,6 +385,8 @@ export function advance(kb: KB, state: GameState): GameState {
   const forcedAt = Math.min(RULES.firstForcedGuess + RULES.forcedGuessEvery * s.wrong.length, RULES.maxQuestions);
   const shouldGuess =
     (top.p >= RULES.guessConfidence && since >= RULES.minGapAfterWrongGuess) ||
+    (n >= RULES.leadGuess.minQuestions && top.p >= RULES.leadGuess.minP && top.p >= RULES.leadGuess.ratio * top.second &&
+      since >= RULES.minGapAfterWrongGuess) ||
     (n >= forcedAt && s.lastGuessAt < n) ||
     choice.questionIndex === null ||
     (choice.gain < RULES.minUsefulGain && since > 0);

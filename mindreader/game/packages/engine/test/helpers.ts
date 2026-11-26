@@ -1,9 +1,10 @@
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { answer, cell, DisplayItem, GameState, KB, loadKB, Manifest, newGame, advance, respondToGuess, rng } from "../src";
 
 export function loadSeed(): KB {
-  const dir = join(__dirname, "..", "..", "..", "data", "seed");
+  const dir = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "data", "seed");
   const manifest = JSON.parse(readFileSync(join(dir, "manifest.json"), "utf8")) as Manifest;
   const bin = readFileSync(join(dir, "arrays.bin"));
   const buffer = bin.buffer.slice(bin.byteOffset, bin.byteOffset + bin.byteLength);

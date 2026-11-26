@@ -33,6 +33,7 @@ const result = await build({
     "process.env.NEXT_PUBLIC_MODE": '"local"',
     "process.env.NEXT_PUBLIC_ARTIFACT": '"1"',
     "process.env.NEXT_PUBLIC_API_BASE": '""',
+    "process.env.NEXT_PUBLIC_SHARE_URL": JSON.stringify(process.env.SHARE_URL ?? "https://claude.ai/artifact/JwmqfNoKgNGzDXo3kWazGa"),
   },
   logLevel: "warning",
 });

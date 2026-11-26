@@ -11,6 +11,8 @@ export interface ManifestQuestion {
   values: number[] | null;
   scope: Scope;
   dup: number | null;
+  /** Questions on the same topic (country, looks, sport...) are not asked many times in a row. */
+  topic?: string | null;
   text: Partial<Record<Lang, string>>;
 }
 

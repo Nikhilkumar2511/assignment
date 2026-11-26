@@ -109,6 +109,7 @@ describe("game API", () => {
 
   it("reports health", async () => {
     const res = await app.inject({ method: "GET", url: "/v1/health" });
-    expect(res.json().snapshot).toMatchObject({ source: "seed", characters: 247 });
+    expect(res.json().snapshot.source).toBe("seed");
+    expect(res.json().snapshot.characters).toBeGreaterThan(300);
   });
 });

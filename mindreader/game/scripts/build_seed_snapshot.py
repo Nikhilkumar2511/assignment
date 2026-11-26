@@ -27,6 +27,26 @@ THEMES = ["marvel", "dc", "star_wars", "harry_potter", "pokemon", "nintendo", "d
           "youtuber", "from_game", "from_tv", "from_film", "from_book", "from_comic", "cartoon"]
 
 
+# Topics: the engine avoids asking many questions on one topic in a row.
+TOPICS = {
+    "country": "american british indian japanese european latin_american african asian_other punjabi",
+    "medium": "from_book from_film from_tv from_game from_anime from_comic cartoon kids_show",
+    "franchise": "disney marvel dc star_wars harry_potter lotr nintendo pokemon",
+    "sport": "athlete football basketball cricket tennis fighter racing olympic captain bowler",
+    "film": "south_cinema film_family action_star romance_star khan beauty_queen hollywood_too",
+    "job": "actor bollywood musician rapper band dancer comedian politician head_of_state royalty military activist "
+           "scientist inventor business tech billionaire youtuber tv_host writer artist composer director",
+    "looks": "mask cape hat glasses beard bald blonde red_hair wears_red green yellow blue small giant",
+    "animal": "animal dog cat mouse bird bear sea",
+    "powers": "superhero villain superpowers magic flies strong speed",
+    "era": "alive born_after_1990 historical elderly child freedom_struggle",
+}
+TOPIC_OF = {k: t for t, keys in TOPICS.items() for k in keys.split()}
+# Near-duplicates: at most one question of each cluster is asked in a game.
+DUPLICATES = [("male", "female"), ("superhero", "superpowers")]
+DUP_OF = {k: i + 1 for i, pair in enumerate(DUPLICATES) for k in pair}
+
+
 def main(out_dir: str) -> None:
     questions = load_questions()
     entities = load_entities(questions)
@@ -40,7 +60,7 @@ def main(out_dir: str) -> None:
     prior = np.array([math.log(prior_weight(e.popularity)) for e in entities], dtype=np.float32)
     kind = np.array([1 if e.kind == "real" else 2 for e in entities], dtype=np.uint8)
     qs = [{"id": i + 1, "key": f"seed:{q.key}", "kind": "cells", "group": None, "values": None,
-           "scope": q.scope, "dup": None, "text": {"en": q.text}} for i, q in enumerate(questions)]
+           "scope": q.scope, "dup": DUP_OF.get(q.key), "topic": TOPIC_OF.get(q.key), "text": {"en": q.text}} for i, q in enumerate(questions)]
     all_idx = np.arange(len(entities), dtype=np.int64)
     cells = [(all_idx, np.array([e.yes[q.key] for e in entities])) for q in questions]
     display = []
