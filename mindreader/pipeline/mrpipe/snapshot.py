@@ -100,7 +100,12 @@ GROUP_BASE_WEIGHT = 4.0     # how many player answers a Wikidata-derived value i
 TRAIT_BASE_WEIGHT = 1.0
 
 
-def export_from_postgres(dsn: str, out_dir: str, version: int | None = None) -> dict:
+def export_from_postgres(dsn: str, out_dir: str, version: int | None = None, max_entities: int | None = None,
+                         quotas: list[tuple[str, str, int]] | None = None, langs: list[str] | None = None,
+                         min_question_support: int = 1) -> dict:
+    """max_entities keeps only the most popular characters; quotas = [(group key, value key, n)]
+    guarantees at least n of them with that attribute (e.g. ("region", "south_asia", 6000)).
+    langs limits display and question text to those languages (all when None)."""
     import psycopg
 
     with psycopg.connect(dsn) as conn:
@@ -108,6 +113,21 @@ def export_from_postgres(dsn: str, out_dir: str, version: int | None = None) -> 
             SELECT e.id, e.kind, e.popularity, e.times_played FROM entities e
             WHERE e.status = 'active' AND NOT EXISTS (SELECT 1 FROM denylist d WHERE d.entity_id = e.id)
             ORDER BY e.popularity DESC, e.id""").fetchall()
+        if max_entities is not None and len(ents) > max_entities:
+            chosen: dict[int, tuple] = {}
+            for group_key, value_key, n in quotas or []:
+                for row in conn.execute("""
+                    SELECT e.id, e.kind, e.popularity, e.times_played FROM entities e
+                    JOIN entity_attrs a ON a.entity_id = e.id JOIN attr_values av ON av.id = a.value_id
+                    JOIN attr_groups g ON g.id = av.group_id
+                    WHERE e.status = 'active' AND g.key = %s AND av.value_key = %s
+                    ORDER BY e.popularity DESC, e.id LIMIT %s""", (group_key, value_key, n)).fetchall():
+                    chosen[row[0]] = row
+            for row in ents:
+                if len(chosen) >= max_entities:
+                    break
+                chosen.setdefault(row[0], row)
+            ents = sorted(chosen.values(), key=lambda r: (-(r[2] or 0), r[0]))
         index = {row[0]: i for i, row in enumerate(ents)}
         n = len(ents)
         prior = np.array([PRIOR_POPULARITY * (p or 0) + PRIOR_PLAYED * math.log1p(t or 0)
@@ -141,6 +161,16 @@ def export_from_postgres(dsn: str, out_dir: str, version: int | None = None) -> 
             FROM questions q LEFT JOIN question_texts t ON t.question_id = q.id
             WHERE q.status = 'active' GROUP BY q.id ORDER BY q.id""").fetchall()
         qrows = [r for r in qrows if r[7] and "en" in r[7] and (r[2] == "trait" or r[3] in group_csr)]
+        # Drop value questions that no (or too few) selected character can answer "yes" to.
+        if max_entities is not None:
+            members: dict[tuple[int, int], int] = defaultdict(int)
+            for gid, (ptr, val) in group_csr.items():
+                for v in val.tolist():
+                    members[(gid, v)] += 1
+            qrows = [r for r in qrows if r[2] == "trait"
+                     or sum(members.get((r[3], v), 0) for v in (r[4] or [])) >= min_question_support]
+        if langs:
+            qrows = [r[:7] + ({k: v for k, v in r[7].items() if k in langs},) for r in qrows]
         qindex = {r[0]: i for i, r in enumerate(qrows)}
         questions = [{"id": r[0], "key": r[1], "kind": "cells" if r[2] == "trait" else "group",
                       "group": r[3], "values": r[4], "scope": r[5], "dup": r[6], "text": r[7]} for r in qrows]
@@ -171,7 +201,7 @@ def export_from_postgres(dsn: str, out_dir: str, version: int | None = None) -> 
 
         labels: dict[int, dict] = defaultdict(lambda: {"n": {}, "d": {}})
         for eid, lang, label, desc in conn.execute("SELECT entity_id, lang, label, description FROM entity_labels"):
-            if eid in index:
+            if eid in index and (not langs or lang in langs):
                 labels[eid]["n"][lang] = label
                 if desc:
                     labels[eid]["d"][lang] = desc

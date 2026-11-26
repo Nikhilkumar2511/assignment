@@ -50,7 +50,8 @@ const html = `<title>MindReader</title>
 `;
 writeFileSync(join(out, "mindreader.html"), html);
 
-const seedDir = join(web, "..", "..", "data", "seed");
+// SNAPSHOT_DIR=/path/to/snapshot builds the page with another character set (e.g. top 30k from Wikidata).
+const seedDir = process.env.SNAPSHOT_DIR ?? join(web, "..", "..", "data", "seed");
 const seed = {
   manifest: JSON.parse(readFileSync(join(seedDir, "manifest.json"), "utf8")),
   display: JSON.parse(readFileSync(join(seedDir, "display.json"), "utf8")),

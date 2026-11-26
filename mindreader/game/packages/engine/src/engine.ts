@@ -228,7 +228,9 @@ export function questionGains(kb: KB, post: Float64Array, state: GameState): { q
   }
   const cands = candidateQuestions(kb, rows, state);
   const gain = new Float64Array(cands.length);
-  const dense = kb.n <= 50000;
+  // Small sets (the seed): score each question per row from a full column. Larger sets use
+  // bucket sums for value questions, so cost does not grow with the number of questions.
+  const dense = kb.n <= 5000;
   const col = dense ? column(kb) : null;
 
   // Single-value group questions without explicit cells are scored from three bucket sums
