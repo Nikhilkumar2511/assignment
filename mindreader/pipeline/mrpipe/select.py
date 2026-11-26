@@ -68,6 +68,7 @@ def run(paths: C.Paths, graph: ClassGraph | None = None) -> dict:
     fiction = con.sql(f"""
         SELECT t.* FROM read_parquet('{p1}/typed/*.parquet') t
         WHERE EXISTS (SELECT 1 FROM unnest(t.p31) AS u(c) JOIN fict_classes f ON f.cls = u.c)
+          AND len(coalesce(t.p279, [])) = 0    -- a class ("dragon", "elf") is not a character
           AND NOT EXISTS (SELECT 1 FROM unnest(t.p31) AS u(c) WHERE u.c = {C.Q_HUMAN}
                           OR u.c IN ({", ".join(str(x) for x in C.FICTIONAL_EXCLUDE_CLASSES) or "-1"}))
         ORDER BY t.sitelinks DESC, t.qid

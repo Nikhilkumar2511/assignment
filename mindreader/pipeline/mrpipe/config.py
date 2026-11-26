@@ -32,7 +32,7 @@ FICTIONAL_ROOT_QIDS = [95074, 178885, 2239243, 4271324, 13002315, 3966183]
 # Q4271324 mythical character, Q13002315 legendary figure and Q3966183 Pokemon species were
 # confirmed on QLever (Pokemon species adds about 1,200 characters the other roots miss).
 # Classes whose instances are not characters players would think of.
-FICTIONAL_EXCLUDE_CLASSES = [340069]   # processional giant (festival figures)
+FICTIONAL_EXCLUDE_CLASSES = [340069, 20643955]   # processional giant (festival figures), human biblical figure
 FICTIONAL_ROOT_LABEL_PATTERNS = [
     r"^(mythological|mythical|legendary|folklore) (character|figure|hero|heroine|being|creature)$",
     r"^(hindu|greek|roman|norse|egyptian|japanese|chinese) (deity|god|goddess|mythological figure)$",

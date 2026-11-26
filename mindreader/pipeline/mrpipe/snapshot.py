@@ -102,7 +102,9 @@ TRAIT_BASE_WEIGHT = 1.0
 
 def export_from_postgres(dsn: str, out_dir: str, version: int | None = None, max_entities: int | None = None,
                          quotas: list[tuple[str, str, int]] | None = None, langs: list[str] | None = None,
-                         min_question_support: int = 1) -> dict:
+                         min_question_support: int = 1, exclude_ids: set[int] | None = None,
+                         exclude_religious: bool = False, include_ids: set[int] | None = None,
+                         prior_scale: float = 1.0) -> dict:
     """max_entities keeps only the most popular characters; quotas = [(group key, value key, n)]
     guarantees at least n of them with that attribute (e.g. ("region", "south_asia", 6000)).
     langs limits display and question text to those languages (all when None)."""
@@ -112,26 +114,41 @@ def export_from_postgres(dsn: str, out_dir: str, version: int | None = None, max
         ents = conn.execute("""
             SELECT e.id, e.kind, e.popularity, e.times_played FROM entities e
             WHERE e.status = 'active' AND NOT EXISTS (SELECT 1 FROM denylist d WHERE d.entity_id = e.id)
-            ORDER BY e.popularity DESC, e.id""").fetchall()
+              AND (NOT %s OR NOT e.is_religious)
+            ORDER BY e.popularity DESC, e.id""", (exclude_religious,)).fetchall()
+        if exclude_ids:
+            ents = [r for r in ents if r[0] not in exclude_ids]
+        allowed = {r[0] for r in ents}
         if max_entities is not None and len(ents) > max_entities:
-            chosen: dict[int, tuple] = {}
-            for group_key, value_key, n in quotas or []:
-                for row in conn.execute("""
-                    SELECT e.id, e.kind, e.popularity, e.times_played FROM entities e
-                    JOIN entity_attrs a ON a.entity_id = e.id JOIN attr_values av ON av.id = a.value_id
-                    JOIN attr_groups g ON g.id = av.group_id
-                    WHERE e.status = 'active' AND g.key = %s AND av.value_key = %s
-                    ORDER BY e.popularity DESC, e.id LIMIT %s""", (group_key, value_key, n)).fetchall():
-                    chosen[row[0]] = row
+            chosen: dict[int, tuple] = {r[0]: (*r, None) for r in ents if include_ids and r[0] in include_ids}
+            for quota in quotas or []:
+                # (group, value, n) or ([(group, value), ...], n): characters with all the values
+                conds, n = ([(quota[0], quota[1])], quota[2]) if isinstance(quota[0], str) else (list(quota[0]), quota[1])
+                sets = []
+                for group_key, value_key in conds:
+                    sets.append({r[0] for r in conn.execute("""
+                        SELECT a.entity_id FROM entity_attrs a JOIN attr_values av ON av.id = a.value_id
+                        JOIN attr_groups g ON g.id = av.group_id WHERE g.key = %s AND av.value_key = %s""",
+                        (group_key, value_key)).fetchall()})
+                members = set.intersection(*sets) if sets else set()
+                taken = 0
+                for row in ents:
+                    if taken >= n:
+                        break
+                    if row[0] in members:
+                        if row[0] not in chosen:
+                            chosen[row[0]] = (*row, None)
+                        taken += 1
             for row in ents:
                 if len(chosen) >= max_entities:
                     break
-                chosen.setdefault(row[0], row)
-            ents = sorted(chosen.values(), key=lambda r: (-(r[2] or 0), r[0]))
+                chosen.setdefault(row[0], (*row, None))
+            ents = sorted((c[:4] for c in chosen.values()), key=lambda r: (-(r[2] or 0), r[0]))[:max_entities]
         index = {row[0]: i for i, row in enumerate(ents)}
         n = len(ents)
         prior = np.array([PRIOR_POPULARITY * (p or 0) + PRIOR_PLAYED * math.log1p(t or 0)
                           for _, _, p, t in ents], dtype=np.float32)
+        prior *= np.float32(prior_scale)   # >1 favours famous characters more strongly
         kind = np.array([1 if k == "real" else 2 for _, k, _, _ in ents], dtype=np.uint8)
 
         groups = [{"id": g, "key": k, "pMatch": float(pm), "pOther": float(po)} for g, k, pm, po in conn.execute(
@@ -198,6 +215,10 @@ def export_from_postgres(dsn: str, out_dir: str, version: int | None = None, max
             cell_lists[qi][0].append(i)
             cell_lists[qi][1].append(min(0.99, max(0.01, p)))
         cells = [(np.array(e, dtype=np.int64), np.array(p, dtype=np.float64)) for e, p in cell_lists]
+        # Trait questions nobody has answered yet (before the LLM fill) carry no information.
+        keep = [i for i, q in enumerate(questions) if q["kind"] != "cells" or len(cells[i][0]) > 0]
+        questions = [questions[i] for i in keep]
+        cells = [cells[i] for i in keep]
 
         labels: dict[int, dict] = defaultdict(lambda: {"n": {}, "d": {}})
         for eid, lang, label, desc in conn.execute("SELECT entity_id, lang, label, description FROM entity_labels"):

@@ -1,8 +1,9 @@
 // Builds the one-page version of the game for a Claude artifact:
 //   dist-artifact/mindreader.html  (CSS and game code inline; React 18 from cdnjs)
-//   dist-artifact/seed.json        (the 247-character seed snapshot)
+//   dist-artifact/seed.bin         (the character snapshot, gzipped)
 import { build } from "esbuild";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { gzipSync } from "node:zlib";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -52,10 +53,15 @@ writeFileSync(join(out, "mindreader.html"), html);
 
 // SNAPSHOT_DIR=/path/to/snapshot builds the page with another character set (e.g. top 30k from Wikidata).
 const seedDir = process.env.SNAPSHOT_DIR ?? join(web, "..", "..", "data", "seed");
-const seed = {
+// Package: gzip( uint32 header length | header JSON {manifest, display} | arrays.bin ).
+// About 3 MB for 30,000 characters instead of about 15 MB as base64 JSON.
+const header = Buffer.from(JSON.stringify({
   manifest: JSON.parse(readFileSync(join(seedDir, "manifest.json"), "utf8")),
   display: JSON.parse(readFileSync(join(seedDir, "display.json"), "utf8")),
-  arrays: readFileSync(join(seedDir, "arrays.bin")).toString("base64"),
-};
-writeFileSync(join(out, "seed.json"), JSON.stringify(seed));
-console.log(`mindreader.html ${(html.length / 1024).toFixed(0)} KB, seed.json ${(JSON.stringify(seed).length / 1024).toFixed(0)} KB`);
+}));
+const arrays = readFileSync(join(seedDir, "arrays.bin"));
+const len = Buffer.alloc(4);
+len.writeUInt32LE(header.length);
+const packed = gzipSync(Buffer.concat([len, header, arrays]), { level: 9 });
+writeFileSync(join(out, "seed.bin"), packed);
+console.log(`mindreader.html ${(html.length / 1024).toFixed(0)} KB, seed.bin ${(packed.length / 1024).toFixed(0)} KB`);
