@@ -358,6 +358,9 @@ def run(paths: C.Paths, graph: ClassGraph | None = None) -> dict:
     missing = [r["qid"] for r in entity_rows if r["qid"] not in labelled]
     entity_rows = [r for r in entity_rows if r["qid"] in labelled]
     attrs = [a for a in attrs if a[0] in labelled]
+    name_rows = [r for r in name_rows if r["qid"] in labelled]
+    site_rows = [r for r in site_rows if r["qid"] in labelled]
+    image_rows = [r for r in image_rows if r["qid"] in labelled]
 
     out = paths.p("build")
     pq.write_table(pa.Table.from_pylist(entity_rows), f"{out}/entities.parquet")

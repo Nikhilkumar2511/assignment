@@ -87,19 +87,23 @@ def run(paths: C.Paths, dsn: str, dump_date: str | None = None) -> dict:
         _copy(cur, "t_labels", ["entity_id", "lang", "label", "description"],
               _rows(f"{b}/entity_labels.parquet", ["qid", "lang", "label", "description"]))
         cur.execute("""INSERT INTO entity_labels SELECT l.* FROM t_labels l JOIN languages g ON g.code = l.lang
-                       ON CONFLICT DO NOTHING""")
+                       JOIN t_entities e ON e.id = l.entity_id ON CONFLICT DO NOTHING""")
         stats["labels"] = cur.rowcount
         cur.execute("DELETE FROM entity_names WHERE entity_id IN (SELECT id FROM t_entities)")
         cur.execute("CREATE TEMP TABLE t_names (entity_id bigint, lang text, name text, is_alias bool) ON COMMIT DROP")
         _copy(cur, "t_names", ["entity_id", "lang", "name", "is_alias"],
               _rows(f"{b}/entity_names.parquet", ["qid", "lang", "name", "is_alias"]))
         cur.execute("""INSERT INTO entity_names (entity_id, lang, name, is_alias)
-                       SELECT entity_id, lang, name, bool_and(is_alias) FROM t_names GROUP BY 1, 2, 3
+                       SELECT n.entity_id, n.lang, n.name, bool_and(n.is_alias) FROM t_names n
+                       JOIN t_entities e ON e.id = n.entity_id GROUP BY 1, 2, 3
                        ON CONFLICT DO NOTHING""")
         stats["names"] = cur.rowcount
         cur.execute("DELETE FROM entity_sitelinks WHERE entity_id IN (SELECT id FROM t_entities)")
-        _copy(cur, "entity_sitelinks", ["entity_id", "wiki", "title"],
+        cur.execute("CREATE TEMP TABLE t_sites (entity_id bigint, wiki text, title text) ON COMMIT DROP")
+        _copy(cur, "t_sites", ["entity_id", "wiki", "title"],
               _rows(f"{b}/entity_sitelinks.parquet", ["qid", "wiki", "title"]))
+        cur.execute("""INSERT INTO entity_sitelinks SELECT s.* FROM t_sites s JOIN t_entities e ON e.id = s.entity_id
+                       ON CONFLICT DO NOTHING""")
 
         # ---- attribute values and labels
         cur.execute("""CREATE TEMP TABLE t_values (group_key text, value_key text, wikidata_id bigint, support int)
