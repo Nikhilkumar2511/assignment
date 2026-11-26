@@ -1,0 +1,8 @@
+/* Single-page build: fit the viewer's frame and keep the side gutter clear of system bars. */
+html, body { height: 100%; }
+.shell {
+  min-height: 100%;
+  padding-block: 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}

@@ -230,7 +230,7 @@ export default function Game() {
           </div>
 
           <section className="panel" aria-live="polite">
-            {client?.mode === "offline" && <p className="note">{t.offline}</p>}
+            {client?.mode === "offline" && process.env.NEXT_PUBLIC_ARTIFACT !== "1" && <p className="note">{t.offline}</p>}
             {error && <p className="note note--error" role="alert">{error}</p>}
 
             {screen === "landing" && (
@@ -331,8 +331,12 @@ export default function Game() {
         </main>
 
         <footer className="foot">
-          <a href="/about">{t.about}</a>
-          <a href="/takedown">{t.takedown}</a>
+          {process.env.NEXT_PUBLIC_ARTIFACT !== "1" && (
+            <>
+              <a href="/about">{t.about}</a>
+              <a href="/takedown">{t.takedown}</a>
+            </>
+          )}
           <span>Data: <a href="https://www.wikidata.org" rel="noopener noreferrer">Wikidata</a> (CC0), Wikipedia, Wikimedia Commons</span>
         </footer>
       </div>

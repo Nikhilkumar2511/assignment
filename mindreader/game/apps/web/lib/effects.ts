@@ -120,6 +120,15 @@ export async function shareCardBlob(card: CharacterCard, headline: string, url: 
 
 /** Web Share with the image when supported; otherwise copy the text and download the image. */
 export async function shareResult(card: CharacterCard, text: string, headline: string): Promise<"shared" | "copied"> {
+  if (process.env.NEXT_PUBLIC_ARTIFACT === "1") {
+    // Embedded build: no Web Share or downloads, so copy the text (inside the click handler).
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      /* clipboard refused */
+    }
+    return "copied";
+  }
   const url = location.origin;
   const blob = await shareCardBlob(card, headline, url);
   const file = new File([blob], "mindreader.png", { type: "image/png" });

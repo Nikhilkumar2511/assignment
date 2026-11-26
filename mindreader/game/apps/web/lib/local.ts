@@ -33,6 +33,12 @@ export class LocalGame implements GameClient {
   }
 
   static async load(): Promise<LocalGame> {
+    if (process.env.NEXT_PUBLIC_ARTIFACT === "1") {
+      // Single-page build: one JSON file next to the page holds the seed, arrays as base64.
+      const seed = await fetch("seed.json").then((r) => r.json());
+      const bin = Uint8Array.from(atob(seed.arrays), (c) => c.charCodeAt(0));
+      return new LocalGame(loadKB(seed.manifest as Manifest, bin.buffer, seed.display as DisplayItem[]));
+    }
     const [m, b, d] = await Promise.all([
       fetch("/offline/manifest.json").then((r) => r.json()),
       fetch("/offline/arrays.bin").then((r) => r.arrayBuffer()),

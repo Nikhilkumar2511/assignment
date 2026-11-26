@@ -12,3 +12,4 @@ dist/
 *.tsbuildinfo
 game/apps/web/public/offline/
 game/data/learning.jsonl
+dist-artifact/
