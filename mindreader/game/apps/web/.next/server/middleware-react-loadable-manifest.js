@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"components/Game.tsx -> ./Nebula":{"id":577,"files":["static/chunks/577.6714347151372158.js"]},"lib/client.ts -> ./local":{"id":3296,"files":["static/chunks/296.cfd8552c1dcb8171.js"]}}';

@@ -84,7 +84,7 @@ class QLever:
     def __init__(self, cache_dir: str, client: httpx.Client | None = None):
         self.cache_dir = cache_dir
         os.makedirs(cache_dir, exist_ok=True)
-        self.client = client or httpx.Client(timeout=httpx.Timeout(900.0, connect=30.0),
+        self.client = client or httpx.Client(timeout=httpx.Timeout(float(os.environ.get("MR_QLEVER_TIMEOUT", "240")), connect=30.0),
                                              headers={"User-Agent": C.USER_AGENT})
         self._last = 0.0
 
@@ -107,14 +107,22 @@ class QLever:
                         time.sleep(min(300, 15 * (attempt + 1)))
                         continue
                     if resp.status_code != 200:
-                        raise RuntimeError(f"{name}: HTTP {resp.status_code}: {resp.read()[:500]!r}")
+                        detail = resp.read()[:500]
+                        if name.endswith("_claims") and (b"allocate" in detail or b"memory" in detail.lower()):
+                            raise QueryTooBig(f"{name}: {detail[:120]!r}")
+                        raise RuntimeError(f"{name}: HTTP {resp.status_code}: {detail!r}")
                     tmp = path + ".part"
                     with open(tmp, "wb") as f:
                         for chunk in resp.iter_bytes(1 << 20):
                             f.write(chunk)
                     os.replace(tmp, path)
                     return path
-            except (httpx.TransportError, httpx.TimeoutException):
+            except httpx.TimeoutException:
+                # A query that runs this long is too big for the shared endpoint: let the caller split it.
+                if name.endswith("_claims"):
+                    raise QueryTooBig(f"{name}: timed out")
+                time.sleep(min(300, 15 * (attempt + 1)))
+            except httpx.TransportError:
                 time.sleep(min(300, 15 * (attempt + 1)))
         raise RuntimeError(f"{name}: gave up after repeated errors")
 
@@ -234,6 +242,39 @@ def texts(q: QLever, store: Store, name: str, pat: str) -> None:
                                              f"FILTER(LANG(?l) IN ({LANG_FILTER})) }}"), store.aliases, multi=True)
 
 
+class QueryTooBig(RuntimeError):
+    pass
+
+
+def claims_for(q: QLever, store: Store, ids: list[int], tag: str) -> set[int]:
+    """VALUE_PROPS claims for ids in one query; halves the batch while the endpoint runs out of memory."""
+    values = "VALUES ?x { " + " ".join(f"wd:Q{i}" for i in ids) + " }"
+    props = " ".join(f"wdt:{p}" for p in VALUE_PROPS)
+    try:
+        path = q.tsv(f"{tag}_claims", f"SELECT ?x ?p ?v WHERE {{ {values} VALUES ?p {{ {props} }} ?x ?p ?v . "
+                                      f"FILTER(isIRI(?v)) }}")
+    except QueryTooBig:
+        if len(ids) <= 50:
+            raise
+        half = len(ids) // 2
+        log(f"{tag}: too big for the endpoint, splitting {len(ids):,} ids")
+        return claims_for(q, store, ids[:half], tag + "a") | claims_for(q, store, ids[half:], tag + "b")
+    refs: set[int] = set()
+    for row in QLever.rows(path):
+        if len(row) < 3:
+            continue
+        x, v = qid_of(row[0]), qid_of(row[2])
+        prop = row[1].strip("<>").rsplit("/", 1)[-1]
+        if x is None or v is None:
+            continue
+        lst = store.claims[x][prop]
+        if v not in lst:
+            lst.append(v)
+        if prop != "P31":
+            refs.add(v)
+    return refs
+
+
 def value_queries(q: QLever, store: Store, ids: list[int], level: int) -> set[int]:
     """Claims, labels and sitelink counts for referenced items, in VALUES chunks."""
     new_refs: set[int] = set()
@@ -241,21 +282,7 @@ def value_queries(q: QLever, store: Store, ids: list[int], level: int) -> set[in
         chunk = ids[start:start + CHUNK]
         values = "VALUES ?x { " + " ".join(f"wd:Q{i}" for i in chunk) + " }"
         tag = f"val{level}_{start // CHUNK:04d}"
-        props = " ".join(f"wdt:{p}" for p in VALUE_PROPS)
-        path = q.tsv(f"{tag}_claims", f"SELECT ?x ?p ?v WHERE {{ {values} VALUES ?p {{ {props} }} ?x ?p ?v . "
-                                      f"FILTER(isIRI(?v)) }}")
-        for row in QLever.rows(path):
-            if len(row) < 3:
-                continue
-            x, v = qid_of(row[0]), qid_of(row[2])
-            prop = row[1].strip("<>").rsplit("/", 1)[-1]
-            if x is None or v is None:
-                continue
-            lst = store.claims[x][prop]
-            if v not in lst:
-                lst.append(v)
-            if prop != "P31":
-                new_refs.add(v)
+        new_refs |= claims_for(q, store, chunk, tag)
         path = q.tsv(f"{tag}_sl", f"SELECT ?x ?s WHERE {{ {values} ?x wikibase:sitelinks ?s }}")
         for row in QLever.rows(path):
             x = qid_of(row[0])
