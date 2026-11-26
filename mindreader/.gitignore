@@ -6,3 +6,9 @@ __pycache__/
 .pytest_cache/
 node_modules/
 work/
+.next/
+out/
+dist/
+*.tsbuildinfo
+game/apps/web/public/offline/
+game/data/learning.jsonl
