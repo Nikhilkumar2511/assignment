@@ -34,9 +34,11 @@ export class LocalGame implements GameClient {
 
   static async load(): Promise<LocalGame> {
     if (process.env.NEXT_PUBLIC_ARTIFACT === "1") {
-      // Single-page build: seed.bin = gzip(uint32 header length | header JSON | arrays).
-      const res = await fetch("seed.bin");
-      const stream = res.body!.pipeThrough(new DecompressionStream("gzip"));
+      // Single-page build: seed.txt = base64(gzip(uint32 header length | header JSON | arrays)).
+      // Base64 text because the artifact host serves .txt but not raw binary files.
+      const text = await (await fetch("seed.txt")).text();
+      const raw = Uint8Array.from(atob(text.trim()), (c) => c.charCodeAt(0));
+      const stream = new Blob([raw]).stream().pipeThrough(new DecompressionStream("gzip"));
       const buf = await new Response(stream).arrayBuffer();
       const headerLen = new DataView(buf).getUint32(0, true);
       const header = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, headerLen)));

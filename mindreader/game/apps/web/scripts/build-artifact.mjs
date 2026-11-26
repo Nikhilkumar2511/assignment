@@ -1,6 +1,6 @@
 // Builds the one-page version of the game for a Claude artifact:
 //   dist-artifact/mindreader.html  (CSS and game code inline; React 18 from cdnjs)
-//   dist-artifact/seed.bin         (the character snapshot, gzipped)
+//   dist-artifact/seed.txt         (the character snapshot, gzipped, then base64)
 import { build } from "esbuild";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
@@ -40,7 +40,8 @@ const result = await build({
 });
 const js = result.outputFiles[0].text.replace(/<\/script/gi, "<\\/script");
 const css = readFileSync(join(web, "app", "globals.css"), "utf8") + readFileSync(join(web, "artifact", "overrides.css"), "utf8");
-const html = `<title>MindReader</title>
+const html = `<meta charset="utf-8">
+<title>MindReader</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Think of a famous person or character. MindReader asks questions and guesses who it is.">
 <style>${css}</style>
@@ -63,5 +64,5 @@ const arrays = readFileSync(join(seedDir, "arrays.bin"));
 const len = Buffer.alloc(4);
 len.writeUInt32LE(header.length);
 const packed = gzipSync(Buffer.concat([len, header, arrays]), { level: 9 });
-writeFileSync(join(out, "seed.bin"), packed);
-console.log(`mindreader.html ${(html.length / 1024).toFixed(0)} KB, seed.bin ${(packed.length / 1024).toFixed(0)} KB`);
+writeFileSync(join(out, "seed.txt"), packed.toString("base64"));
+console.log(`mindreader.html ${(html.length / 1024).toFixed(0)} KB, seed.txt ${(packed.length * 4 / 3 / 1024).toFixed(0)} KB (gzip ${(packed.length / 1024).toFixed(0)} KB)`);
