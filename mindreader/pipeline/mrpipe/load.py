@@ -43,6 +43,7 @@ def run(paths: C.Paths, dsn: str, dump_date: str | None = None) -> dict:
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute("INSERT INTO pipeline_runs (stage, dump_date) VALUES ('load', %s) RETURNING id", (dump_date,))
         run_id = cur.fetchone()[0]
+        cur.execute("SET LOCAL work_mem = '256MB'")
 
         # ---- attribute groups
         for g in C.GROUPS:
@@ -61,6 +62,8 @@ def run(paths: C.Paths, dsn: str, dump_date: str | None = None) -> dict:
                                                        "birth_year", "is_minor", "is_religious"],
                                   _rows(f"{b}/entities.parquet", ["qid", "kind", "sitelinks", "pageviews_12m",
                                                                    "popularity", "birth_year", "is_minor", "is_religious"]))
+        cur.execute("CREATE UNIQUE INDEX ON t_entities (id)")
+        cur.execute("ANALYZE t_entities")
         cur.execute("""
             INSERT INTO entities (id, kind, sitelinks, pageviews_12m, popularity, birth_year, is_minor, is_religious)
             SELECT id, kind, sitelinks, pageviews_12m, popularity, birth_year, is_minor, is_religious FROM t_entities
@@ -73,7 +76,8 @@ def run(paths: C.Paths, dsn: str, dump_date: str | None = None) -> dict:
         """)
         cur.execute("""
             UPDATE entities SET status = 'hidden', hidden_reason = 'not in latest selection', updated_at = now()
-            WHERE source = 'wikidata' AND status = 'active' AND id NOT IN (SELECT id FROM t_entities)
+            WHERE source = 'wikidata' AND status = 'active'
+              AND NOT EXISTS (SELECT 1 FROM t_entities t WHERE t.id = entities.id)
         """)
         stats["entities_hidden_not_selected"] = cur.rowcount
 
@@ -126,6 +130,7 @@ def run(paths: C.Paths, dsn: str, dump_date: str | None = None) -> dict:
         cur.execute("CREATE TEMP TABLE t_attrs (entity_id bigint, group_key text, value_key text) ON COMMIT DROP")
         _copy(cur, "t_attrs", ["entity_id", "group_key", "value_key"],
               _rows(f"{b}/entity_attrs.parquet", ["qid", "group_key", "value_key"]))
+        cur.execute("ANALYZE t_attrs")
         cur.execute("""
             INSERT INTO entity_attrs (entity_id, value_id, source)
             SELECT a.entity_id, av.id, 'wikidata' FROM t_attrs a
@@ -159,7 +164,8 @@ def run(paths: C.Paths, dsn: str, dump_date: str | None = None) -> dict:
         stats["questions_upserted"] = cur.rowcount
         cur.execute("""
             UPDATE questions SET status = 'hidden', updated_at = now()
-            WHERE source = 'generated' AND status = 'active' AND key NOT IN (SELECT key FROM t_questions)
+            WHERE source = 'generated' AND status = 'active'
+              AND NOT EXISTS (SELECT 1 FROM t_questions t WHERE t.key = questions.key)
         """)
         stats["questions_hidden"] = cur.rowcount
         cur.execute("""
